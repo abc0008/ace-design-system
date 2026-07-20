@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" data-direction="A">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BankAnalysis Design System — Gallery</title>
+
+<!-- VENDORED SNAPSHOT of the app stylesheet, so this repo is self-contained.
+     Source: BankAnalysis frontend/src/index.css @ e0a75cb (branch claude/close-intel), copied 2026-07-20.
+     This CAN drift from the running app. Refresh with the one-liner in the banner below / README. -->
+<link rel="stylesheet" href="styles/index.snapshot.css" />
+
+<style>
+  /* Gallery chrome only. Everything gx-* belongs to this page, not the design system.
+     Deliberately minimal so index.css does the real work on every specimen. */
+  body { margin: 0; font-family: 'Inter Tight', system-ui, sans-serif;
+         background: hsl(var(--background)); color: hsl(var(--foreground)); }
+  .gx-wrap { max-width: 1240px; margin: 0 auto; padding: 28px 24px 120px; }
+
+  .gx-top { position: sticky; top: 0; z-index: 50; display: flex; align-items: center;
+            justify-content: space-between; gap: 16px; padding: 14px 24px;
+            background: var(--ace-nav-bg, hsl(var(--card))); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--ace-line, hsl(var(--border))); }
+  .gx-top h1 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .gx-top p  { margin: 2px 0 0; font-size: 11px; color: hsl(var(--muted-foreground)); }
+  .gx-toggle { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px;
+               border: 1px solid var(--ace-line, hsl(var(--border))); }
+  .gx-toggle button { border: 0; background: transparent; color: hsl(var(--foreground));
+                      font: 600 12px 'Inter Tight', system-ui, sans-serif; cursor: pointer;
+                      padding: 7px 14px; border-radius: 999px; }
+  .gx-toggle button[aria-pressed="true"] { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+
+  .gx-sec { margin: 44px 0 0; }
+  .gx-sec > h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em;
+                 font-family: 'JetBrains Mono', monospace; color: hsl(var(--muted-foreground));
+                 border-bottom: 1px solid var(--ace-line, hsl(var(--border)));
+                 padding-bottom: 8px; margin-bottom: 18px; }
+  .gx-sub { margin: 26px 0 10px; font-size: 13px; font-weight: 600; }
+  .gx-note { font-size: 12px; line-height: 1.6; color: hsl(var(--muted-foreground)); margin: 0 0 14px; }
+  .gx-specimen { border: 1px dashed var(--ace-line, hsl(var(--border))); border-radius: 12px;
+                 padding: 18px; margin-bottom: 18px; }
+  .gx-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; text-transform: uppercase;
+              letter-spacing: 0.1em; color: hsl(var(--muted-foreground)); margin-bottom: 10px; }
+
+  /* Token swatch grid */
+  .gx-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(206px, 1fr)); gap: 10px; }
+  .gx-sw { border: 1px solid var(--ace-line, hsl(var(--border))); border-radius: 10px; overflow: hidden;
+           background: var(--ace-panel-strong, hsl(var(--card))); }
+  .gx-sw-chip { height: 46px; border-bottom: 1px solid var(--ace-line, hsl(var(--border)));
+                background-image: linear-gradient(45deg,rgba(128,128,128,.16) 25%,transparent 25%,transparent 75%,rgba(128,128,128,.16) 75%),
+                                  linear-gradient(45deg,rgba(128,128,128,.16) 25%,transparent 25%,transparent 75%,rgba(128,128,128,.16) 75%);
+                background-size: 12px 12px; background-position: 0 0, 6px 6px; }
+  .gx-sw-chip span { display: block; height: 100%; }
+  .gx-sw-meta { padding: 8px 10px; }
+  .gx-sw-name { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; word-break: break-all; }
+  .gx-sw-val  { font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
+                color: hsl(var(--muted-foreground)); margin-top: 3px; word-break: break-all; }
+  .gx-sw-role { font-size: 10.5px; color: hsl(var(--muted-foreground)); margin-top: 5px; line-height: 1.4; }
+  .gx-dead { opacity: 0.5; }
+  .gx-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 8.5px;
+            text-transform: uppercase; letter-spacing: 0.08em; padding: 1px 5px; border-radius: 3px;
+            border: 1px solid currentColor; margin-left: 5px; vertical-align: 1px; }
+
+  .gx-warn { border: 1px solid hsl(var(--destructive) / 0.45); background: hsl(var(--destructive) / 0.10);
+             border-radius: 12px; padding: 14px 16px; margin-bottom: 22px; font-size: 12.5px; line-height: 1.65; }
+  .gx-warn strong { display: block; margin-bottom: 4px; }
+  .gx-warn code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; }
+  .gx-snap { border: 1px solid color-mix(in srgb, hsl(var(--primary)) 42%, transparent);
+             background: color-mix(in srgb, hsl(var(--primary)) 11%, transparent);
+             border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+             font-size: 12.5px; line-height: 1.65; }
+  .gx-snap code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; }
+  .gx-snap strong { display: block; margin-bottom: 4px; }
+  .gx-shadow-demo { height: 62px; border-radius: 14px; background: var(--ace-panel-strong);
+                    box-shadow: var(--ace-shadow); border: 1px solid var(--ace-line); }
+</style>
+</head>
+
+<!-- ace-hub-theme-active is REQUIRED: the --ace-* family is defined only inside it (FINDINGS F-06). -->
+<body class="ace-hub-theme-active ace-hub-theme" data-direction="A">
+
+<div class="gx-top">
+  <div>
+    <h1>BankAnalysis Design System — Gallery</h1>
+    <p>Live specimens against a vendored snapshot of <code>index.css</code> — see the snapshot banner below</p>
+  </div>
+  <div class="gx-toggle" role="group" aria-label="Theme direction">
+    <button type="button" data-dir="A" aria-pressed="true">A · Light</button>
+    <button type="button" data-dir="B" aria-pressed="false">B · Dark</button>
+  </div>
+</div>
+
+<div class="gx-wrap">
+
+  <div class="gx-snap">
+    <strong>&#9888; This stylesheet is a SNAPSHOT, not the live app</strong>
+    This gallery renders against <code>styles/index.snapshot.css</code> &mdash; a byte copy of BankAnalysis
+    <code>frontend/src/index.css</code> taken <b>2026-07-20</b> from commit <code>e0a75cb</code> (branch
+    <code>claude/close-intel</code>). BankAnalysis is a private repo and is not vendored here, so this copy
+    <b>can drift from the running app</b> and nothing in this repo will warn you when it does. Treat any
+    specimen as evidence about the snapshot, not a guarantee about production.
+    <br /><br />
+    Refresh it in one line, from the repo root:
+    <br /><code>cp /path/to/BankAnalysis/frontend/src/index.css styles/index.snapshot.css</code>
+  </div>
+
+  <div class="gx-warn">
+    <strong>Two things this page cannot show</strong>
+    1. <code>index.css</code> contains <code>@tailwind</code> directives that only resolve through the PostCSS build.
+    Loaded raw here, <b>no Tailwind utility class works</b> — so RM Pro Forma specimens (which are built from
+    utilities) render structurally but unstyled. The Forecast and <code>ace-*</code> specimens are hand-written CSS
+    and render exactly as in the app.
+    2. Fonts load from Google Fonts via <code>@import</code>; offline, everything falls back to system stacks.
+  </div>
+
+  <!-- ============================= TOKENS ============================= -->
+  <section class="gx-sec">
+    <h2>Tokens — resolved live via getComputedStyle</h2>
+    <p class="gx-note">
+      Values below are read from the browser, not typed in — they are whatever <code>index.css</code> actually
+      resolves to right now. Toggle the theme to see them change. Checkerboard behind a swatch means the colour
+      is translucent.
+    </p>
+
+    <h3 class="gx-sub">shadcn semantic (20)</h3>
+    <div class="gx-swatches" id="sw-shadcn"></div>
+
+    <h3 class="gx-sub">Chart palette (13)</h3>
+    <div class="gx-swatches" id="sw-chart"></div>
+
+    <h3 class="gx-sub">ACE surface (10) — defined only under <code>body.ace-hub-theme-active</code></h3>
+    <div class="gx-swatches" id="sw-ace"></div>
+
+    <h3 class="gx-sub">Elevation</h3>
+    <div class="gx-specimen">
+      <div class="gx-label">--ace-shadow</div>
+      <div class="gx-shadow-demo"></div>
+    </div>
+
+    <h3 class="gx-sub">Phantom tokens — referenced in the app, defined nowhere (FINDINGS F-01)</h3>
+    <p class="gx-note">
+      These resolve to <em>nothing</em>. Each swatch below shows the fallback hex the app actually renders.
+      An empty swatch would be the truthful rendering of <code>var(--ace-chart-2)</code> with no fallback.
+    </p>
+    <div class="gx-swatches" id="sw-phantom"></div>
+
+    <h3 class="gx-sub">Typography</h3>
+    <div class="gx-specimen">
+      <div class="gx-label">The three real families</div>
+      <p style="font-family:'Inter Tight',system-ui,sans-serif;font-size:15px;margin:0 0 10px">
+        Inter Tight — body and UI default. Net interest income rose 4.2% against plan.</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;margin:0 0 10px;text-transform:uppercase;letter-spacing:0.1em">
+        JetBrains Mono — codes, chips, tabular figures, table headers</p>
+      <p class="ace-serif" style="font-size:22px;margin:0">Fraunces italic — display accent, RM Pro Forma hero only</p>
+    </div>
+  </section>
+
+  <!-- ============================= COMPONENTS ============================= -->
+  <section class="gx-sec">
+    <h2>Components — Forecast vocabulary</h2>
+
+    <h3 class="gx-sub">A3 · forecast-health-chip — 186 uses, the most-used class in the product</h3>
+    <div class="gx-specimen">
+      <div class="gx-label">tones</div>
+      <div class="forecast-submit-chips">
+        <span class="forecast-health-chip green">GREEN · on plan</span>
+        <span class="forecast-health-chip yellow">YELLOW · watch</span>
+        <span class="forecast-health-chip red">RED · breach</span>
+        <span class="forecast-health-chip neutral">NEUTRAL</span>
+        <span class="forecast-health-chip moss">MOSS</span>
+        <span class="forecast-health-chip gold">GOLD</span>
+        <span class="forecast-health-chip amber">AMBER</span>
+      </div>
+      <div class="gx-label" style="margin-top:16px">clickable + mini</div>
+      <div class="forecast-submit-chips">
+        <button type="button" class="forecast-health-chip clickable gold">FY2026</button>
+        <button type="button" class="forecast-health-chip clickable neutral">FY2027</button>
+        <span class="forecast-health-chip neutral mini">MINI</span>
+      </div>
+    </div>
+
+    <h3 class="gx-sub">A6 · buttons</h3>
+    <div class="gx-specimen">
+      <div class="forecast-submit-chips">
+        <button type="button" class="forecast-primary-button">Submit package</button>
+        <button type="button" class="forecast-secondary-button">Cancel</button>
+        <button type="button" class="forecast-primary-button compact">Accept</button>
+        <button type="button" class="forecast-secondary-button compact">Reject</button>
+        <button type="button" class="forecast-primary-button" disabled>Disabled</button>
+      </div>
+    </div>
+
+    <h3 class="gx-sub">A10 · forecast-segmented</h3>
+    <div class="gx-specimen">
+      <div class="forecast-segmented" role="group" aria-label="Results lens">
+        <button type="button" class="active" aria-pressed="true">Variance</button>
+        <button type="button" aria-pressed="false">Plan</button>
+        <button type="button" aria-pressed="false">Modified</button>
+      </div>
+    </div>
+
+    <h3 class="gx-sub">A11 · forecast-status-chip &nbsp;·&nbsp; A5 · forecast-section-code &nbsp;·&nbsp; A13 · forecast-mono</h3>
+    <div class="gx-specimen">
+      <div class="forecast-submit-chips" style="margin-bottom:14px">
+        <span class="forecast-status-chip moss">SUBMITTED</span>
+        <span class="forecast-status-chip gold">IN REVIEW</span>
+        <span class="forecast-status-chip red">RETURNED</span>
+        <span class="forecast-status-chip neutral">DRAFT</span>
+      </div>
+      <div><span class="forecast-section-code">EX_00 ● NII composition — FTP basis</span></div>
+      <div style="margin-top:12px"><span class="forecast-mono">1,284.6</span>
+        &nbsp;<span class="forecast-mono pos">+4.2%</span>
+        &nbsp;<span class="forecast-mono neg">−1.8%</span></div>
+    </div>
+
+    <h3 class="gx-sub">A4 · forecast-submit-note</h3>
+    <div class="gx-specimen">
+      <p class="forecast-submit-note">FTP basis; excludes intercompany eliminations.</p>
+      <p class="forecast-submit-note error-list">Reviewer must return the package before re-anchoring.</p>
+    </div>
+
+    <h3 class="gx-sub">B · shared ace-* primitives</h3>
+    <div class="gx-specimen">
+      <div class="gx-label">ace-input · ace-button-primary / -secondary / -danger</div>
+      <div class="forecast-submit-chips" style="align-items:center">
+        <input class="ace-input" value="1,284.60" style="width:150px" aria-label="Demo input" />
+        <button type="button" class="ace-button-primary">Primary</button>
+        <button type="button" class="ace-button-secondary">Secondary</button>
+        <button type="button" class="ace-button-danger">Danger</button>
+      </div>
+      <div class="gx-label" style="margin-top:16px">ace-floating-surface / ace-floating-item</div>
+      <div class="ace-floating-surface" style="width:220px;padding:4px">
+        <button type="button" class="ace-floating-item" style="display:block;width:100%;text-align:left;padding:8px 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer">Duplicate entry</button>
+        <button type="button" class="ace-floating-item" style="display:block;width:100%;text-align:left;padding:8px 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer">Export to Excel</button>
+      </div>
+      <div class="gx-label" style="margin-top:16px">ace-tooltip</div>
+      <div class="ace-tooltip" style="display:inline-block;padding:8px 10px">
+        <div style="font-size:13px;font-weight:600">Net interest income</div>
+        <div style="font-size:12px;color:hsl(var(--muted-foreground))">FY2026 plan · $MM</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= PATTERNS ============================= -->
+  <section class="gx-sec">
+    <h2>Patterns</h2>
+
+    <h3 class="gx-sub">P1 · Panel + head + body — the structural spine</h3>
+    <div class="forecast-module" style="margin:0;padding:0;min-height:0">
+      <section class="forecast-panel">
+        <div class="forecast-panel-head">
+          <div>
+            <span class="forecast-section-code">EX_00 ● NII composition — FTP basis</span>
+            <h2>Lending spread vs deposit franchise vs treasury mismatch ($MM, by year)</h2>
+          </div>
+        </div>
+        <div class="forecast-submit-chips">
+          <span class="forecast-health-chip green">NII $284.6MM/mo</span>
+          <span class="forecast-health-chip neutral">FTP basis</span>
+        </div>
+        <p class="forecast-submit-note">Excludes intercompany eliminations and the securities portfolio.</p>
+      </section>
+    </div>
+
+    <h3 class="gx-sub">P3 · Read table — forecast-home-table</h3>
+    <div class="forecast-module" style="margin:0;padding:0;min-height:0">
+      <section class="forecast-panel">
+        <div class="forecast-home-table-wrap">
+          <table class="forecast-home-table">
+            <thead><tr><th>Division</th><th>Status</th><th>NI Δ vs plan</th><th>Updated</th><th></th></tr></thead>
+            <tbody>
+              <tr class="mine">
+                <td>Commercial Banking</td>
+                <td><span class="forecast-health-chip neutral mini">SUBMITTED</span></td>
+                <td class="forecast-mono pos">+4.21</td>
+                <td class="forecast-mono">2026-07-18 14:02</td>
+                <td><button type="button" class="forecast-home-action ghost">Diff</button></td>
+              </tr>
+              <tr>
+                <td>Retail Banking</td>
+                <td><span class="forecast-health-chip neutral mini">IN REVIEW</span></td>
+                <td class="forecast-mono neg">−1.84</td>
+                <td class="forecast-mono">2026-07-18 11:47</td>
+                <td><button type="button" class="forecast-home-action ghost">Diff</button></td>
+              </tr>
+              <tr>
+                <td>Treasury</td>
+                <td><span class="forecast-health-chip neutral mini">DRAFT</span></td>
+                <td class="forecast-mono">0.00</td>
+                <td class="forecast-mono">2026-07-17 09:15</td>
+                <td><button type="button" class="forecast-home-action ghost">Diff</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="gx-label" style="margin-top:14px">empty state convention</div>
+        <div class="forecast-home-table-wrap">
+          <table class="forecast-home-table">
+            <thead><tr><th>Division</th><th>Status</th></tr></thead>
+            <tbody><tr><td colspan="2"><span class="dim-note">No packages submitted.</span></td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <h3 class="gx-sub">P4 · Dense matrix — forecast-table in a scroll shell</h3>
+    <div class="forecast-module" style="margin:0;padding:0;min-height:0">
+      <section class="forecast-panel">
+        <div class="forecast-panel-head">
+          <div>
+            <span class="forecast-section-code">OP_01 · Baseline</span>
+            <h2>Balance sheet build, by forecast year</h2>
+          </div>
+        </div>
+        <div class="forecast-table-shell ace-scroll-shell forecast-compact-table">
+          <table class="forecast-table">
+            <thead><tr>
+              <th>Metric · $MM</th><th>FY2024</th><th>FY2025</th><th>FY2026</th><th>FY2027</th><th>FY2028</th>
+            </tr></thead>
+            <tbody>
+              <tr><td><strong>Total loans</strong></td>
+                <td><span class="forecast-mono">8,412.0</span></td>
+                <td><span class="forecast-mono">8,904.3</span></td>
+                <td><input value="9,388.1" aria-label="Total loans FY2026" /></td>
+                <td><input value="9,871.5" aria-label="Total loans FY2027" /></td>
+                <td><input value="10,344.9" aria-label="Total loans FY2028" /></td></tr>
+              <tr><td><strong>Total deposits</strong></td>
+                <td><span class="forecast-mono">9,880.4</span></td>
+                <td><span class="forecast-mono">10,203.7</span></td>
+                <td><input value="10,644.2" aria-label="Total deposits FY2026" /></td>
+                <td><input value="11,090.8" aria-label="Total deposits FY2027" /></td>
+                <td><input value="11,528.3" aria-label="Total deposits FY2028" /></td></tr>
+              <tr><td><strong>Net interest income</strong></td>
+                <td><span class="forecast-mono">284.1</span></td>
+                <td><span class="forecast-mono">301.6</span></td>
+                <td><span class="forecast-mono">318.4</span> <small class="variance-pos">+4.2%</small></td>
+                <td><span class="forecast-mono">334.9</span> <small class="variance-pos">+5.2%</small></td>
+                <td><span class="forecast-mono">348.2</span> <small class="variance-neg">−1.1%</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="forecast-submit-note">Editable cells write to the working submission; focus ring uses <code>--primary</code>.</p>
+      </section>
+    </div>
+
+    <h3 class="gx-sub">P5 · Stage disclosure — forecast-accordion</h3>
+    <div class="forecast-module" style="margin:0;padding:0;min-height:0">
+      <details class="forecast-accordion" open>
+        <summary>
+          <div>
+            <span class="forecast-section-code">OP_02 · Macro environment</span>
+            <h2>Base economic scenario and annual divergence</h2>
+          </div>
+        </summary>
+        <div class="forecast-accordion-body">
+          <section class="forecast-subpanel">
+            <h3>Rate path</h3>
+            <p class="forecast-submit-note">Fed funds terminal 3.75%; curve normalises by Q3 FY2027.</p>
+          </section>
+        </div>
+      </details>
+      <details class="forecast-accordion">
+        <summary>
+          <div>
+            <span class="forecast-section-code">OP_03 · Operating levers</span>
+            <h2>Collapsed — note the summary label swaps to “Expand”</h2>
+          </div>
+        </summary>
+        <div class="forecast-accordion-body"><p class="forecast-submit-note">Hidden content.</p></div>
+      </details>
+    </div>
+
+    <h3 class="gx-sub">P2 · Action bar + note</h3>
+    <div class="forecast-module" style="margin:0;padding:0;min-height:0">
+      <section class="forecast-panel">
+        <div class="forecast-submit-chips">
+          <button type="button" class="forecast-primary-button">Re-anchor to v4</button>
+          <button type="button" class="forecast-secondary-button">Close</button>
+        </div>
+        <p class="forecast-submit-note">Reviewer must return the package before re-anchoring.</p>
+      </section>
+    </div>
+
+    <h3 class="gx-sub">P10 · RM Pro Forma workspace — <span style="color:hsl(var(--destructive))">Tailwind utilities do not resolve here</span></h3>
+    <p class="gx-note">
+      Structure is faithful; the utility-driven colour and spacing are absent because Tailwind is unbuilt in this
+      context. <code>ace-rm-*</code> and <code>card-wrapper</code> are hand-written CSS and <em>do</em> render.
+    </p>
+    <section class="ace-rm-overview">
+      <span class="ace-rm-eyebrow">OP_PRLX · rm-pro-forma</span>
+      <h1 class="ace-rm-title">Model every RM hire with <span class="ace-serif">hub-grade consistency.</span></h1>
+      <p class="ace-rm-description">Five-year pro forma for a relationship manager, with payback and yield-curve sensitivity.</p>
+    </section>
+    <div class="card-wrapper" style="margin-top:18px;padding:18px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px">Assumptions</div>
+      <div style="font-size:12px;color:hsl(var(--muted-foreground))">card-wrapper — radius 18px, --ace-panel fill, --ace-shadow</div>
+    </div>
+  </section>
+
+  <!-- ============================= CHARTS ============================= -->
+  <section class="gx-sec">
+    <h2>Chart palette in context</h2>
+    <p class="gx-note">
+      Recharts renders SVG at runtime; these are static SVGs using the identical token syntax
+      (<code>stroke="hsl(var(--chart-1))"</code>) so the palette, grid, and axis colours can be checked in both themes.
+    </p>
+    <div class="forecast-module" style="margin:0;padding:0;min-height:0">
+      <section class="forecast-panel">
+        <div class="forecast-panel-head">
+          <div><span class="forecast-section-code">RV_01 ● Series palette</span>
+          <h2>chart-1 through chart-5, with grid and axis</h2></div>
+        </div>
+        <svg viewBox="0 0 720 220" width="100%" height="220" role="img"
+             aria-label="Demonstration line chart showing chart-1 through chart-5 series against grid and axis colours">
+          <g stroke="hsl(var(--chart-grid))" stroke-width="1" stroke-dasharray="3 3">
+            <line x1="46" y1="30"  x2="700" y2="30" /><line x1="46" y1="70"  x2="700" y2="70" />
+            <line x1="46" y1="110" x2="700" y2="110" /><line x1="46" y1="150" x2="700" y2="150" />
+          </g>
+          <line x1="46" y1="185" x2="700" y2="185" stroke="hsl(var(--chart-axis))" stroke-width="1" />
+          <line x1="46" y1="20"  x2="46"  y2="185" stroke="hsl(var(--chart-axis))" stroke-width="1" />
+          <polyline fill="none" stroke="hsl(var(--chart-1))" stroke-width="3" points="46,150 177,120 308,92 439,64 570,44 700,32"/>
+          <polyline fill="none" stroke="hsl(var(--chart-2))" stroke-width="3" points="46,162 177,146 308,128 439,118 570,100 700,88"/>
+          <polyline fill="none" stroke="hsl(var(--chart-3))" stroke-width="3" points="46,170 177,160 308,152 439,140 570,132 700,120"/>
+          <polyline fill="none" stroke="hsl(var(--chart-4))" stroke-width="3" stroke-dasharray="5 4" points="46,176 177,168 308,164 439,156 570,150 700,144"/>
+          <polyline fill="none" stroke="hsl(var(--chart-5))" stroke-width="3" points="46,180 177,177 308,174 439,170 570,166 700,161"/>
+          <g font-family="JetBrains Mono, monospace" font-size="10" fill="hsl(var(--chart-axis))">
+            <text x="40" y="34"  text-anchor="end">400</text><text x="40" y="114" text-anchor="end">200</text>
+            <text x="40" y="189" text-anchor="end">0</text>
+            <text x="46"  y="205">FY24</text><text x="290" y="205">FY26</text><text x="672" y="205">FY28</text>
+          </g>
+        </svg>
+        <div class="forecast-submit-chips" style="margin-top:12px">
+          <span class="forecast-health-chip neutral">chart-1</span><span class="forecast-health-chip neutral">chart-2</span>
+          <span class="forecast-health-chip neutral">chart-3</span><span class="forecast-health-chip neutral">chart-4</span>
+          <span class="forecast-health-chip neutral">chart-5</span>
+        </div>
+      </section>
+
+      <section class="forecast-panel">
+        <div class="forecast-panel-head">
+          <div><span class="forecast-section-code">RV_02 ● Directional</span>
+          <h2>chart-up / chart-down — variance bars</h2></div>
+        </div>
+        <svg viewBox="0 0 720 150" width="100%" height="150" role="img"
+             aria-label="Bar chart demonstrating chart-up and chart-down colours for positive and negative variance">
+          <line x1="46" y1="75" x2="700" y2="75" stroke="hsl(var(--chart-axis))" stroke-width="1" />
+          <rect x="70"  y="34" width="66" height="41" fill="hsl(var(--chart-up))" />
+          <rect x="176" y="75" width="66" height="30" fill="hsl(var(--chart-down))" />
+          <rect x="282" y="47" width="66" height="28" fill="hsl(var(--chart-up))" />
+          <rect x="388" y="75" width="66" height="46" fill="hsl(var(--chart-down))" />
+          <rect x="494" y="26" width="66" height="49" fill="hsl(var(--chart-up))" />
+          <rect x="600" y="75" width="66" height="18" fill="hsl(var(--chart-down))" />
+          <g font-family="JetBrains Mono, monospace" font-size="10" fill="hsl(var(--chart-axis))">
+            <text x="103" y="24" text-anchor="middle">+4.2</text><text x="209" y="120" text-anchor="middle">−3.1</text>
+            <text x="315" y="37" text-anchor="middle">+2.8</text><text x="421" y="136" text-anchor="middle">−4.7</text>
+            <text x="527" y="16" text-anchor="middle">+5.0</text><text x="633" y="108" text-anchor="middle">−1.8</text>
+          </g>
+        </svg>
+        <p class="forecast-submit-note">
+          <code>--chart-down</code> holds the identical value to <code>--destructive</code> in both themes — see FINDINGS F-02.
+        </p>
+      </section>
+    </div>
+  </section>
+
+  <section class="gx-sec">
+    <h2>Verification checklist</h2>
+    <p class="gx-note">
+      Toggle A ↔ B and confirm: every swatch value changes except the theme-invariant ones
+      (<code>--primary</code>, <code>--accent</code>, <code>--chart-1</code>, <code>--chart-2</code>,
+      <code>--chart-up</code>, <code>--ring</code>); panels and tables keep visible borders in both themes;
+      chip tones stay legible; the accordion label swaps Collapse/Expand; both SVG charts recolour.
+    </p>
+  </section>
+</div>
+
+<script>
+(function () {
+  var TOKENS = {
+    'sw-shadcn': [
+      ['--background','Surface','App canvas'], ['--foreground','Surface','Primary text — 136 uses'],
+      ['--card','Surface','Card fill; chart tooltip bg'], ['--card-foreground','Surface','Text on card'],
+      ['--popover','Surface','Tailwind-only',1], ['--popover-foreground','Surface','Tailwind-only',1],
+      ['--primary','Brand','ACE amber — THE brand colour, 103 uses'],
+      ['--primary-foreground','Brand','Ink on amber'],
+      ['--secondary','Brand','Deep slate'], ['--secondary-foreground','Brand','Tailwind-only',1],
+      ['--muted','Brand','Muted surface'], ['--muted-foreground','Brand','Secondary text — 223 uses, #1'],
+      ['--accent','Brand','Olive — positive/moss'], ['--accent-foreground','Brand','Tailwind-only',1],
+      ['--destructive','Brand','Terracotta — errors + negatives'],
+      ['--destructive-foreground','Brand','Tailwind-only',1],
+      ['--border','Control','Tailwind border-*'], ['--input','Control','Input surface'],
+      ['--ring','Control','Focus ring == primary'], ['--radius','Control',':root only; hand-written CSS ignores it']
+    ],
+    'sw-chart': [
+      ['--chart-1','Series','= --primary (amber)'], ['--chart-2','Series','= --accent (olive)'],
+      ['--chart-3','Series','= --secondary (slate)'], ['--chart-4','Series','= --destructive (terracotta)'],
+      ['--chart-5','Series','neutral grey — inverts across themes'],
+      ['--chart-6','Series','DEAD — 0 uses',1], ['--chart-7','Series','DEAD — 0 uses',1],
+      ['--chart-8','Series','DEAD — 0 uses',1],
+      ['--chart-up','Directional','Favourable variance'],
+      ['--chart-down','Directional','Unfavourable — identical to --destructive'],
+      ['--chart-neutral','Directional','DEAD — 0 uses',1],
+      ['--chart-grid','Chrome','Every CartesianGrid'], ['--chart-axis','Chrome','Every axis + tick — 33 uses']
+    ],
+    'sw-ace': [
+      ['--ace-nav-bg','Surface','Translucent nav bar'], ['--ace-panel','Surface','card-wrapper fill'],
+      ['--ace-panel-strong','Surface','forecast-panel fill — 34 uses'],
+      ['--ace-line','Line','THE default border — 179 uses, #2 overall'],
+      ['--ace-line-strong','Line','Input + control borders'],
+      ['--ace-input-bg','Surface','ace-input fill'],
+      ['--ace-positive','Semantic','Positive value text'], ['--ace-negative','Semantic','Negative value text'],
+      ['--ace-warning','Semantic','Caution state'], ['--ace-shadow','Elevation','Shadow value, not a colour']
+    ],
+    'sw-phantom': [
+      ['--ace-chart-2','8 uses','always renders #6b7c93'], ['--ace-chart-3','2 uses','always renders #9aa7b8'],
+      ['--ace-red','9 uses','always renders #c4554d'], ['--ace-moss','5 uses','always renders #5d8a66'],
+      ['--ace-gold','3 uses','always renders #FFAC03'], ['--ace-danger','3 uses','always renders #e5241d'],
+      ['--ace-lust','2 uses','inline hex fallback'], ['--ace-smokescreen','1 use','inline hex fallback'],
+      ['--ace-ink','1 use','inline hex fallback'], ['--font-mono','3 uses','inline stack fallback'],
+      ['--ace-shadow-soft','2 uses','NO FALLBACK — shadow silently drops']
+    ]
+  };
+  var PHANTOM_FALLBACK = {
+    '--ace-chart-2':'#6b7c93','--ace-chart-3':'#9aa7b8','--ace-red':'#c4554d','--ace-moss':'#5d8a66',
+    '--ace-gold':'#FFAC03','--ace-danger':'#e5241d','--ace-lust':'#e5241d','--ace-smokescreen':'#595959',
+    '--ace-ink':'#242424','--font-mono':'transparent','--ace-shadow-soft':'transparent'
+  };
+
+  function paint() {
+    var cs = getComputedStyle(document.body);
+    Object.keys(TOKENS).forEach(function (id) {
+      var host = document.getElementById(id);
+      if (!host) return;
+      host.innerHTML = '';
+      TOKENS[id].forEach(function (t) {
+        var name = t[0], group = t[1], role = t[2], dead = t[3];
+        var raw = cs.getPropertyValue(name).trim();
+        var isPhantom = (id === 'sw-phantom');
+        var swatchColor, shown;
+
+        if (isPhantom) {
+          swatchColor = PHANTOM_FALLBACK[name] || 'transparent';
+          shown = raw ? raw : '(undefined)';
+        } else if (!raw) {
+          swatchColor = 'transparent'; shown = '(undefined)';
+        } else if (name === '--ace-shadow') {
+          swatchColor = 'transparent'; shown = raw;
+        } else if (name === '--radius') {
+          swatchColor = 'transparent'; shown = raw;
+        } else if (/^[\d.]+\s+[\d.]+%\s+[\d.]+%$/.test(raw)) {
+          swatchColor = 'hsl(' + raw + ')'; shown = raw + '  →  hsl(' + raw + ')';
+        } else {
+          swatchColor = raw; shown = raw;
+        }
+
+        var el = document.createElement('div');
+        el.className = 'gx-sw' + (dead ? ' gx-dead' : '');
+        var chip = document.createElement('div');
+        chip.className = 'gx-sw-chip';
+        var fill = document.createElement('span');
+        fill.style.background = swatchColor;
+        if (name === '--ace-shadow') { fill.style.boxShadow = raw; fill.style.margin = '8px'; fill.style.height = 'calc(100% - 16px)';
+                                       fill.style.background = 'var(--ace-panel-strong)'; fill.style.borderRadius = '6px'; }
+        chip.appendChild(fill);
+        var meta = document.createElement('div');
+        meta.className = 'gx-sw-meta';
+        var n = document.createElement('div'); n.className = 'gx-sw-name'; n.textContent = name;
+        if (dead) { var tag = document.createElement('span'); tag.className = 'gx-tag';
+                    tag.textContent = isPhantom ? 'phantom' : 'unused'; n.appendChild(tag); }
+        var v = document.createElement('div'); v.className = 'gx-sw-val'; v.textContent = shown;
+        var r = document.createElement('div'); r.className = 'gx-sw-role'; r.textContent = group + ' · ' + role;
+        meta.appendChild(n); meta.appendChild(v); meta.appendChild(r);
+        el.appendChild(chip); el.appendChild(meta);
+        host.appendChild(el);
+      });
+    });
+  }
+
+  document.querySelectorAll('.gx-toggle button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var dir = btn.getAttribute('data-dir');
+      // Mirror App.js:57-59 exactly — html AND body both carry data-direction.
+      document.documentElement.setAttribute('data-direction', dir);
+      document.body.setAttribute('data-direction', dir);
+      document.querySelectorAll('.gx-toggle button').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      paint();
+    });
+  });
+
+  paint();
+  // Repaint once webfonts/vars settle.
+  setTimeout(paint, 350);
+})();
+</script>
+</body>
+</html>

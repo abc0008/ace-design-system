@@ -1,0 +1,247 @@
+/* =============================================================================
+   BankAnalysis — Design Tokens (EXTRACTED, not authored)
+   =============================================================================
+   Source of truth: frontend/src/index.css lines 7-218.
+   This file is a GROUPED, COMMENTED MIRROR for reference and tooling. It is NOT
+   imported by the app. If you change a value here and not in index.css, nothing
+   happens. Treat index.css as canonical; regenerate this file when it changes.
+
+   THEME MODEL — there is no `.dark` class. Themes are:
+     :root                                          base scaffolding (light values)
+     body.ace-hub-theme-active                      Theme A / light  (adds --ace-*)
+     body.ace-hub-theme-active[data-direction='B']  Theme B / dark
+   Activation: frontend/src/App.js:57-59 sets `ace-hub-theme-active` on <body>
+   and `data-direction` on BOTH <html> and <body>. App.js:76 also puts the
+   `ace-hub-theme` class on the root <div>.
+
+   IMPORTANT: :root does NOT define the --ace-* family. Any surface that renders
+   outside `body.ace-hub-theme-active` gets no ace tokens at all — borders and
+   panel fills silently collapse. See FINDINGS.md F-06.
+
+   Colour tokens are stored as BARE HSL CHANNELS ("40 100% 51%"), not colours.
+   Always consume them wrapped: hsl(var(--primary)). The --ace-* family is the
+   exception: those are complete rgba()/hex values, consumed bare: var(--ace-line).
+   ========================================================================== */
+
+
+/* -----------------------------------------------------------------------------
+   1. BASE SCAFFOLDING — :root  (index.css:7-51)
+   shadcn/Tailwind semantic layer. 33 tokens. Light values.
+   Note --radius is defined ONLY here; neither theme block redefines it.
+   -------------------------------------------------------------------------- */
+:root {
+  /* --- Surfaces --------------------------------------------------------- */
+  --background: 0 0% 92%;          /* app canvas          ≈ #EBEBEB */
+  --foreground: 0 0% 7%;           /* body text           ≈ #121212 */
+  --card: 0 0% 94%;                /* card fill           ≈ #F0F0F0 */
+  --card-foreground: 0 0% 7%;
+  --popover: 0 0% 94%;             /* Tailwind-only, no direct var() consumer */
+  --popover-foreground: 0 0% 7%;   /* Tailwind-only */
+
+  /* --- Brand / intent --------------------------------------------------- */
+  --primary: 40 100% 51%;          /* ACE amber           ≈ #FFAD05  THE brand colour */
+  --primary-foreground: 0 0% 7%;   /* ink on amber (amber is light — never white) */
+  --secondary: 203 32% 22%;        /* deep slate          ≈ #264757 */
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 88%;
+  --muted-foreground: 0 0% 38%;    /* secondary text — most-consumed token (223 uses) */
+  --accent: 103 18% 50%;           /* olive               ≈ #769669  "positive/moss" */
+  --accent-foreground: 0 0% 98%;
+  --destructive: 14 65% 55%;       /* terracotta          ≈ #D7653F  errors + negatives */
+  --destructive-foreground: 0 0% 98%;
+
+  /* --- Lines & controls ------------------------------------------------- */
+  --border: 0 0% 78%;
+  --input: 0 0% 96%;
+  --ring: 40 100% 51%;             /* focus ring == primary */
+  --radius: 0.75rem;               /* NB: tailwind.config.js comment claims 0.375rem — stale */
+
+  /* --- Chart palette (13) ----------------------------------------------- */
+  /* Categorical series. 1-5 are in active use; 6-8 are defined but unconsumed. */
+  --chart-1: 40 100% 51%;          /* = --primary  (amber)     series 1 */
+  --chart-2: 103 18% 50%;          /* = --accent   (olive)     series 2 */
+  --chart-3: 203 32% 22%;          /* = --secondary (slate)    series 3 */
+  --chart-4: 14 65% 55%;           /* = --destructive (terra)  series 4 */
+  --chart-5: 0 0% 38%;             /* neutral grey             series 5 */
+  --chart-6: 0 0% 64%;             /* UNUSED — see FINDINGS F-05 */
+  --chart-7: 0 0% 48%;             /* UNUSED */
+  --chart-8: 0 0% 20%;             /* UNUSED */
+
+  /* Directional semantics. NB --chart-down is byte-identical to --destructive
+     in BOTH themes; the codebase uses them interchangeably. */
+  --chart-up: 103 18% 50%;         /* favourable / positive variance */
+  --chart-down: 14 65% 55%;        /* unfavourable / negative variance */
+  --chart-neutral: 0 0% 45%;       /* UNUSED */
+
+  /* Chart chrome. Consumed by every CartesianGrid / XAxis / YAxis. */
+  --chart-grid: 0 0% 76%;
+  --chart-axis: 0 0% 42%;
+}
+
+
+/* -----------------------------------------------------------------------------
+   2. THEME A — LIGHT  (index.css:55-107)
+   body.ace-hub-theme-active
+   Re-declares all 33 base tokens at identical light values, THEN adds the
+   10-token --ace-* family that the products actually build on.
+   -------------------------------------------------------------------------- */
+body.ace-hub-theme-active {
+  /* Identical to :root above — repeated verbatim in the source. */
+  --background: 0 0% 92%;
+  --foreground: 0 0% 7%;
+  --card: 0 0% 94%;
+  --card-foreground: 0 0% 7%;
+  --popover: 0 0% 94%;
+  --popover-foreground: 0 0% 7%;
+  --primary: 40 100% 51%;
+  --primary-foreground: 0 0% 7%;
+  --secondary: 203 32% 22%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 88%;
+  --muted-foreground: 0 0% 38%;
+  --accent: 103 18% 50%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 14 65% 55%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 78%;
+  --input: 0 0% 96%;
+  --ring: 40 100% 51%;
+  --chart-1: 40 100% 51%;
+  --chart-2: 103 18% 50%;
+  --chart-3: 203 32% 22%;
+  --chart-4: 14 65% 55%;
+  --chart-5: 0 0% 38%;
+  --chart-6: 0 0% 64%;
+  --chart-7: 0 0% 48%;
+  --chart-8: 0 0% 20%;
+  --chart-up: 103 18% 50%;
+  --chart-down: 14 65% 55%;
+  --chart-neutral: 0 0% 45%;
+  --chart-grid: 0 0% 76%;
+  --chart-axis: 0 0% 42%;
+
+  /* --- ACE surface family (10) — the real workhorses --------------------- */
+  /* Complete colour values, NOT hsl channels. Consume bare: var(--ace-line). */
+  --ace-nav-bg:       rgba(235, 235, 235, 0.88);  /* translucent nav bar */
+  --ace-panel:        rgba(239, 239, 239, 0.94);  /* card-wrapper fill */
+  --ace-panel-strong: rgba(235, 235, 235, 1);     /* forecast-panel fill (opaque) */
+  --ace-line:         rgba(17, 17, 17, 0.14);     /* DEFAULT BORDER — 179 uses, #2 overall */
+  --ace-line-strong:  rgba(17, 17, 17, 0.24);     /* input + control borders */
+  --ace-shadow:       0 20px 46px rgba(0, 0, 0, 0.11);  /* a shadow, not a colour */
+  --ace-input-bg:     rgba(255, 255, 255, 0.72);
+  --ace-positive:     #739666;                    /* ≈ --accent / --chart-up */
+  --ace-negative:     #d95f3d;                    /* ≈ --destructive / --chart-down */
+  --ace-warning:      #a97800;
+}
+
+
+/* -----------------------------------------------------------------------------
+   3. THEME B — DARK  (index.css:115-167)
+   body.ace-hub-theme-active[data-direction='B']
+   The app's "direction" toggle. B is the dark theme.
+   -------------------------------------------------------------------------- */
+body.ace-hub-theme-active[data-direction='B'] {
+  --background: 0 0% 7%;
+  --foreground: 0 0% 92%;
+  --card: 0 0% 20%;
+  --card-foreground: 0 0% 92%;
+  --popover: 0 0% 20%;
+  --popover-foreground: 0 0% 92%;
+  --primary: 40 100% 51%;          /* amber is theme-INVARIANT */
+  --primary-foreground: 0 0% 7%;
+  --secondary: 203 21% 53%;        /* slate lightens for contrast */
+  --secondary-foreground: 0 0% 7%;
+  --muted: 0 0% 16%;
+  --muted-foreground: 0 0% 82%;
+  --accent: 103 18% 50%;           /* olive is theme-INVARIANT */
+  --accent-foreground: 0 0% 98%;
+  --destructive: 14 72% 62%;       /* terracotta lightens */
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 28%;
+  --input: 0 0% 24%;
+  --ring: 40 100% 51%;
+
+  --chart-1: 40 100% 51%;          /* invariant */
+  --chart-2: 103 18% 50%;          /* invariant */
+  --chart-3: 203 21% 53%;
+  --chart-4: 14 72% 62%;
+  --chart-5: 0 0% 72%;             /* greys INVERT across themes */
+  --chart-6: 0 0% 54%;
+  --chart-7: 0 0% 38%;
+  --chart-8: 0 0% 84%;
+  --chart-up: 103 18% 50%;
+  --chart-down: 14 72% 62%;
+  --chart-neutral: 0 0% 62%;
+  --chart-grid: 0 0% 30%;
+  --chart-axis: 0 0% 68%;
+
+  --ace-nav-bg:       rgba(17, 17, 17, 0.88);
+  --ace-panel:        rgba(36, 36, 36, 0.92);
+  --ace-panel-strong: rgba(31, 31, 31, 1);
+  --ace-line:         rgba(235, 235, 235, 0.14);
+  --ace-line-strong:  rgba(235, 235, 235, 0.3);
+  --ace-shadow:       0 24px 56px rgba(0, 0, 0, 0.38);
+  --ace-input-bg:     rgba(46, 46, 46, 0.82);
+  --ace-positive:     #85aa76;
+  --ace-negative:     #e6724f;
+  --ace-warning:      #e1bb45;
+}
+
+
+/* -----------------------------------------------------------------------------
+   4. COMPONENT-SCOPED TOKENS (not global)
+   -------------------------------------------------------------------------- */
+
+/* index.css:217-218 — aliases scoped to the brand mark only. */
+.ace-brand-mark {
+  --aa-ink:    hsl(var(--foreground));
+  --aa-accent: hsl(var(--primary));
+}
+
+/* index.css:3792-3795 — per-section identity colour, set by element id and read
+   by the panel/accordion patterns via color-mix(). These are HARD-CODED HEX and
+   bypass the token system entirely (FINDINGS F-04). Companion --section-progress
+   (default 50%) drives the accordion scroll-progress fill (index.css:3954). */
+#forecast-base     { --section-color: #5B8DEF; }  /* blue   — not a token */
+#forecast-macro    { --section-color: #9C6ADE; }  /* purple — not a token */
+#forecast-existing { --section-color: #FFAC03; }  /* amber  — a literal of --primary */
+#forecast-hiring   { --section-color: #2f9e6e; }  /* green  — not a token */
+
+
+/* -----------------------------------------------------------------------------
+   5. PHANTOM TOKENS — REFERENCED BUT NEVER DEFINED  (do not add without review)
+   -------------------------------------------------------------------------- */
+/* The following 11 custom properties are consumed via var() in the app but are
+   defined in ZERO stylesheets. Every reference resolves to its inline fallback,
+   in both themes. They are listed here as documentation only — DELIBERATELY
+   COMMENTED OUT, because defining them would silently change the rendered app.
+   See FINDINGS.md F-01 before acting.
+
+     --ace-chart-2     8 uses   always renders #6b7c93
+     --ace-chart-3     2 uses   always renders #9aa7b8
+     --ace-red         9 uses   always renders #c4554d
+     --ace-moss        5 uses   always renders #5d8a66
+     --ace-gold        3 uses   always renders #FFAC03
+     --ace-danger      3 uses   always renders #e5241d
+     --ace-lust        2 uses
+     --ace-smokescreen 1 use
+     --ace-ink         1 use
+     --font-mono       3 uses
+     --ace-shadow-soft 2 uses   NO FALLBACK — box-shadow silently drops
+*/
+
+
+/* -----------------------------------------------------------------------------
+   6. TYPOGRAPHY — the three real families  (index.css:1)
+   -------------------------------------------------------------------------- */
+/* @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500
+                &family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500');
+
+   'Inter Tight', system-ui, sans-serif   body / UI default
+   'JetBrains Mono', monospace            all codes, chips, tabular figures, th
+   Fraunces (italic 500)                  .ace-serif — display accent, RM Pro Forma only
+
+   There is no font token. Families are written as literal stacks at ~40 sites.
+   tailwind.config.js:114-118 declares an 'Avenir Pro' family that is never
+   imported and referenced by zero source files (FINDINGS F-08).
+*/
