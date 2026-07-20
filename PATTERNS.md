@@ -21,7 +21,7 @@ Each pattern lists its parts in composition order, a canonical snippet distilled
     <TrendingUp size={16} />
   </div>
 
-  <div className="forecast-table-shell ace-scroll-shell">
+  <div className="forecast-table-shell brand-scroll-shell">
     <table className="forecast-table">…</table>
   </div>
 
@@ -30,7 +30,7 @@ Each pattern lists its parts in composition order, a canonical snippet distilled
 ```
 
 **Evidence:** 100 panel / 91 head / 112 code occurrences across 15 files. `ForecastExecView.js:902, 968, 992`, `ForecastReviewConsole.js:1075`, `stages/RegionalContextStage.js:193`, `ForecastNiiBuildup.js:119`, `ForecastProjectWorkspace.js:804`
-**Tokens:** `--ace-line`, `--ace-panel-strong`, `--foreground`, `--muted-foreground`, `--primary`, `--section-color`
+**Tokens:** `--brand-line`, `--brand-panel-strong`, `--foreground`, `--muted-foreground`, `--primary`, `--section-color`
 **Variants:** `.forecast-panel-lite`, `.forecast-panel-tall`, `.forecast-subpanel` (nested, `h3`), `.forecast-exec-pair` (two-up)
 **Section identity:** when the panel sits under an id like `#forecast-macro`, `--section-color` tints the code and the left border (`index.css:3760-3799`).
 
@@ -54,7 +54,7 @@ Closes nearly every panel that accepts input.
 ```
 
 **Evidence:** 44 chip-row + 116 note occurrences. `stages/RegionalContextStage.js:160`, `ForecastCycleHome.js:257`, `ForecastOp03Suite.js:844`, `ForecastPromptBox.js:235`
-**Tokens:** `--primary`, `--primary-foreground`, `--ace-line`, `--foreground`, `--muted-foreground`, `--destructive`
+**Tokens:** `--primary`, `--primary-foreground`, `--brand-line`, `--foreground`, `--muted-foreground`, `--destructive`
 **States:** buttons `:disabled` at 0.5 opacity; note swaps to `.error-list` in `--destructive`
 **⚠ Drift:** `.forecast-submit-actions` and `.forecast-submit-chips` are used interchangeably for the same job — only `RegionalContextStage.js` reaches for the semantic one. FINDINGS F-13.
 
@@ -87,7 +87,7 @@ Narrow tabular data with an empty state and sign-coloured numerics.
 ```
 
 **Evidence:** 9 files. `ForecastAuditTrail.js:113`, `ForecastExecView.js:906`, `ForecastReviewConsole.js` (×4), `ForecastOp03Suite.js` (×3), `ForecastMacroScenarios.js` (×3), `ForecastCycleHome.js`, `ForecastProjects.js`
-**Tokens:** `--ace-line`, `--muted-foreground`, `--primary` (`tr.mine`), `--chart-up` (`.pos`), `--destructive` (`.neg`)
+**Tokens:** `--brand-line`, `--muted-foreground`, `--primary` (`tr.mine`), `--chart-up` (`.pos`), `--destructive` (`.neg`)
 **Conventions worth keeping:** mono uppercase `th`; `colSpan` + `.dim-note` empty state; chip in the status column; ghost action button in the last, header-less column.
 
 ---
@@ -95,10 +95,10 @@ Narrow tabular data with an empty state and sign-coloured numerics.
 ## P4. Dense matrix — the wide editable grid
 Where the actual forecasting happens. Distinct from P3 in every respect except being a table.
 
-**Parts:** `.forecast-table-shell.ace-scroll-shell[.forecast-compact-table]` › `table.forecast-table[.forecast-time-matrix]`
+**Parts:** `.forecast-table-shell.brand-scroll-shell[.forecast-compact-table]` › `table.forecast-table[.forecast-time-matrix]`
 
 ```jsx
-<div className="forecast-table-shell ace-scroll-shell forecast-compact-table">
+<div className="forecast-table-shell brand-scroll-shell forecast-compact-table">
   <table className="forecast-table forecast-time-matrix">
     <thead><tr>
       <th>Metric · $MM</th>
@@ -126,7 +126,7 @@ Where the actual forecasting happens. Distinct from P3 in every respect except b
 ```
 
 **Evidence:** `stages/RegionalResultsStage.js:88, 127, 192` (6 total), `stages/RegionalContextStage.js` (×3), `stages/RegionalBaselineStage.js`, `ForecastGrowthMatrix.js:42`, `ForecastPeerProForma.js`
-**Tokens:** `--ace-line`, `--ace-line-strong`, `--ace-panel-strong` (sticky th), `--ace-input-bg`, `--primary` (focus), `--chart-up`/`--destructive` (variance)
+**Tokens:** `--brand-line`, `--brand-line-strong`, `--brand-panel-strong` (sticky th), `--brand-input-bg`, `--primary` (focus), `--chart-up`/`--destructive` (variance)
 **Column typing:** `th.time-col` × `.q` (quarter) `.m` (month) `.yt` (year-to-date) `.ya`/`.actual` `.yr` (forecast year) — a real, reusable convention for period-typed columns.
 **Cell shape:** value in `.forecast-mono` + delta in `<small class="variance-pos|neg">` is the canonical two-line numeric cell.
 **Sibling implementations:** `.op3-year-table` (`ForecastOp03Suite.js`, ×3) and `.macro-diff-table` (`ForecastMacroScenarios.js`, ×3) are the same idea under different names.
@@ -164,7 +164,7 @@ const { CartesianGrid, ComposedChart, chartAxisColor, chartGridColor, tooltipSty
 ```
 
 **Evidence:** `RegionalForecastingModule.js:5066, 5069, 5078`; `stages/RegionalBaselineStage.js:5`, `stages/RegionalContextStage.js:12`, `stages/RegionalResultsStage.js:7`; `ForecastProjectWorkspace.js:644, 674, 804`
-**Tokens:** `--ace-line`, `--ace-panel-strong`, `--section-color`, `--primary`, `--muted-foreground`
+**Tokens:** `--brand-line`, `--brand-panel-strong`, `--section-color`, `--primary`, `--muted-foreground`
 **The `vm` prop bag is the defining mechanic:** the parent injects *everything* — Recharts primitives, custom components, constants, formatters, and the chart theme strings — into one object per stage. Stages import almost nothing directly.
 
 **Trade-off, stated plainly:** this keeps stages dependency-free and trivially testable (the tests stub `vm` wholesale — `RegionalContextStageMacroStale.test.js:36`), at the cost of a ~30-key untyped contract with no compile-time checking. It is a deliberate pattern, not an accident, and it is worth preserving *or* replacing wholesale — but not partially. `ForecastNiiBuildup.js` already breaks out of it (imports Recharts directly, takes explicit props) while being rendered *inside* a `vm` stage at `RegionalResultsStage.js:495`. FINDINGS F-20.
@@ -334,10 +334,10 @@ Explicit four-state machine, expressed in markup.
 The whole RMPF page in one shape — and note it shares only `card-wrapper` with everything above.
 
 ```jsx
-<section className="ace-rm-overview">
-  <span className="ace-rm-eyebrow">OP_PRLX · rm-pro-forma</span>
-  <h1 className="ace-rm-title">Model every RM hire with <span className="ace-serif text-primary">hub-grade consistency.</span></h1>
-  <p className="ace-rm-description">…</p>
+<section className="brand-rm-overview">
+  <span className="brand-rm-eyebrow">OP_PRLX · rm-pro-forma</span>
+  <h1 className="brand-rm-title">Model every RM hire with <span className="brand-serif text-primary">hub-grade consistency.</span></h1>
+  <p className="brand-rm-description">…</p>
 </section>
 
 <div className="flex gap-2">{/* D2 entry tab pills */}</div>
@@ -357,8 +357,8 @@ The whole RMPF page in one shape — and note it shares only `card-wrapper` with
 </Card>
 ```
 **Evidence:** `RMProForma_Dashboard.js:843-853, 854-858, 905-926, 1121-1300, 1303`
-**Tokens:** `--ace-panel`, `--ace-line`, `--ace-shadow`, `--primary`, `--secondary`, `--accent`, `--muted-foreground`
-**Note the parallel to P1:** `ace-rm-eyebrow` is `forecast-section-code` reinvented; `card-wrapper` is `forecast-panel` reinvented; the Radix accordion is `forecast-accordion` reinvented. Three pairs, zero shared code.
+**Tokens:** `--brand-panel`, `--brand-line`, `--brand-shadow`, `--primary`, `--secondary`, `--accent`, `--muted-foreground`
+**Note the parallel to P1:** `brand-rm-eyebrow` is `forecast-section-code` reinvented; `card-wrapper` is `forecast-panel` reinvented; the Radix accordion is `forecast-accordion` reinvented. Three pairs, zero shared code.
 
 ---
 

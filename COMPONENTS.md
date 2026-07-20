@@ -16,11 +16,11 @@ The single most important structural fact about this codebase:
 |---|---|---|
 | `forecast-*` classNames | **1,846** | **0** |
 | Distinct `forecast-*` CSS selectors | 249 | — |
-| `ace-*` classNames | 24 | 16 |
+| `brand-*` classNames | 24 | 16 |
 | Styling approach | hand-written CSS classes | `components/ui/` + Tailwind utilities |
 | Inline `style={{}}` | 194 | 8 |
 
-They share exactly three things: the token layer, the `ace-*` primitives (§B), and `card-wrapper`. Everything else is parallel invention. See `FINDINGS.md` F-09.
+They share exactly three things: the token layer, the `brand-*` primitives (§B), and `card-wrapper`. Everything else is parallel invention. See `FINDINGS.md` F-09.
 
 ---
 
@@ -40,7 +40,7 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 </section>
 ```
 
-**Tokens:** `--ace-line` (border), `--ace-panel-strong` (fill, at 94% via `color-mix`), `--foreground`
+**Tokens:** `--brand-line` (border), `--brand-panel-strong` (fill, at 94% via `color-mix`), `--foreground`
 **Variants:** `.forecast-panel-lite` (1178), `.forecast-panel-tall` (1258), `.forecast-subpanel` (3303 — nested, `h3`-scale, 2% foreground wash), `.forecast-grid .forecast-panel` (margin reset, 1254)
 **Shares its rule with:** `.forecast-status-strip`, `.forecast-operating-bar` — same border/radius/fill triple
 **Where used:** `ForecastExecView.js:902, 968, 992`, `ForecastReviewConsole.js:1075`, `stages/RegionalContextStage.js:193`, `ForecastNiiBuildup.js:119`, `ForecastProjectWorkspace.js:804`
@@ -87,8 +87,8 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 <Link className="forecast-health-chip neutral" to="/forecasting/macro?tab=compare">Macro isolation A/B</Link>
 ```
 
-**Base:** `inline-flex`, `min-height:26px`, `border-radius:999px`, `padding:6px 9px`, JetBrains Mono 10px, uppercase, `letter-spacing:0.06em`, `border:1px solid var(--ace-line)`
-**Tokens:** `--ace-line`, `--foreground`, `--primary` (green/moss/gold), `--accent` (yellow), `--destructive` (red)
+**Base:** `inline-flex`, `min-height:26px`, `border-radius:999px`, `padding:6px 9px`, JetBrains Mono 10px, uppercase, `letter-spacing:0.06em`, `border:1px solid var(--brand-line)`
+**Tokens:** `--brand-line`, `--foreground`, `--primary` (green/moss/gold), `--accent` (yellow), `--destructive` (red)
 **Variants:** `.green` `.yellow` `.red` `.neutral` `.moss` `.amber` `.gold` `.clickable` `.mini`
 **Tone convention:** every variant is `color-mix(in srgb, hsl(var(--token)) 13-16%, transparent)` fill + the same token at 38-44% for the border. Copy that formula for new tones.
 **⚠⚠ The tone names lie.** `.green` renders **amber**, `.yellow` and `.amber` render **olive green**, and `.green`/`.moss`, `.yellow`/`.amber` are byte-identical pairs. Only `.red` and `.neutral` mean what they say. Verified in-browser — see FINDINGS F-28 before using any tone but `.red`/`.neutral`.
@@ -105,7 +105,7 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 
 **Tokens:** `--muted-foreground` (base), `--destructive` (`.error-list`)
 **Base:** `font-size:12px; line-height:1.6; margin-top:12px`
-**⚠** Error state is applied inconsistently: `.error-list` exists, but ~7 sites instead write `style={{ color: 'var(--ace-danger, #e5241d)' }}` inline against a **phantom token**. FINDINGS F-01.
+**⚠** Error state is applied inconsistently: `.error-list` exists, but ~7 sites instead write `style={{ color: 'var(--brand-danger, #e5241d)' }}` inline against a **phantom token**. FINDINGS F-01.
 
 ## A5. `forecast-section-code` / `forecast-kicker` — the machine-readable eyebrow
 **Purpose:** short uppercase mono code identifying a section. The product's signature detail.
@@ -135,10 +135,10 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 
 **Shared base:** `inline-flex; gap:7px; border-radius:999px; padding:9px 18px; font-size:12.5px`
 **Primary tokens:** `--primary` (bg + border), `--primary-foreground` (text)
-**Secondary tokens:** `--ace-line` (border), `transparent` bg, `--foreground` (text)
+**Secondary tokens:** `--brand-line` (border), `transparent` bg, `--foreground` (text)
 **States:** `:disabled { opacity:0.5; cursor:default }`; `.compact` → `padding:5px 12px; font-size:11.5px`
 **Icon convention:** lucide, `size={13}` on compact, `size={14}` on default, always leading.
-**⚠ There is no danger button** in the Forecast vocabulary, though `.ace-button-danger` exists (index.css:475).
+**⚠ There is no danger button** in the Forecast vocabulary, though `.brand-button-danger` exists (index.css:475).
 
 ## A7. `forecast-submit-chips` — the universal control strip
 **Purpose:** horizontal wrap row holding chips, buttons, selects. The de-facto toolbar.
@@ -180,7 +180,7 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 </div>
 ```
 
-**Tokens:** `--ace-line` (th border; td border at 55%), `--muted-foreground` (th), `--primary` (`tr.mine` 5% wash), `--chart-up` (`.pos`), `--destructive` (`.neg`)
+**Tokens:** `--brand-line` (th border; td border at 55%), `--muted-foreground` (th), `--primary` (`tr.mine` 5% wash), `--chart-up` (`.pos`), `--destructive` (`.neg`)
 **th treatment:** JetBrains Mono 10px uppercase `letter-spacing:0.08em` — the table-header convention across the app.
 **Variants:** `tr.mine`, `td.pos`, `td.neg`
 **Empty state convention:** `colSpan` + `<span className="dim-note">` — consistent across all 9 files.
@@ -190,7 +190,7 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 **Usage:** 17 occurrences each. `index.css:1912-1979`
 
 ```jsx
-<div className="forecast-table-shell ace-scroll-shell forecast-compact-table">
+<div className="forecast-table-shell brand-scroll-shell forecast-compact-table">
   <table className="forecast-table">
     <thead><tr><th>Metric</th>{years.map((y) => <th key={y}>FY{y}</th>)}</tr></thead>
     <tbody>
@@ -209,11 +209,11 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 </div>
 ```
 
-**Tokens:** `--ace-line` (cell borders), `--ace-line-strong` (input borders), `--ace-input-bg`, `--ace-panel-strong` (sticky th), `--primary` (input focus ring), `--foreground`
+**Tokens:** `--brand-line` (cell borders), `--brand-line-strong` (input borders), `--brand-input-bg`, `--brand-panel-strong` (sticky th), `--primary` (input focus ring), `--foreground`
 **Base:** `min-width:960px` forces the scroll; `.forecast-compact-table` relaxes to 820px
 **Sticky:** `th` sticky at 1949-1959; `td:first-child`/`:nth-child(2)` are sticky label columns (1965)
 **Input state:** `:focus { border-color: hsl(var(--primary)); box-shadow: 0 0 0 2px color-mix(in srgb, hsl(var(--primary)) 28%, transparent) }` — the app's canonical focus treatment.
-**Always pair with `ace-scroll-shell`** (B1) for the themed scrollbar.
+**Always pair with `brand-scroll-shell`** (B1) for the themed scrollbar.
 
 ## A10. `forecast-segmented` — pill tab / lens selector
 **Purpose:** mutually-exclusive view switch. The app's only tab control.
@@ -230,7 +230,7 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 </div>
 ```
 
-**Tokens:** `--ace-line` (track border), `--ace-panel` (track fill at 80%), `--primary` + `--primary-foreground` (active button), `--foreground` (rest)
+**Tokens:** `--brand-line` (track border), `--brand-panel` (track fill at 80%), `--primary` + `--primary-foreground` (active button), `--foreground` (rest)
 **Base:** track is a `999px` pill with `padding:4px; gap:4px`; buttons are `min-height:30px`, transparent border, `transition:0.16s ease`
 **States:** `button.active` → amber fill
 **⚠ `aria-pressed` is applied at only 3 of 6 sites** — the other three announce nothing to assistive tech. FINDINGS F-14.
@@ -264,7 +264,7 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 </details>
 ```
 
-**Tokens:** `--ace-line`, `--muted-foreground`, `--primary` (summary svg)
+**Tokens:** `--brand-line`, `--muted-foreground`, `--primary` (summary svg)
 **Signature behaviour:** `summary::after` renders a pill reading `Collapse`, swapped to `Expand` via `:not([open])` (1141-1156). `::-webkit-details-marker` is suppressed.
 **⚠** `summary` padding and its children are redefined in three successive override waves (1116 → 3924 → 3995). FINDINGS F-07.
 
@@ -306,14 +306,14 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
 
 ---
 
-# B. Shared `ace-*` primitives
+# B. Shared `brand-*` primitives
 
 29 selectors in `index.css`, all semantic-token-backed and theme-aware. **This is the de-facto shared layer between the two products** and the right foundation for any future consolidation.
 
-## B1. `ace-scroll-shell` — themed scrollbar
+## B1. `brand-scroll-shell` — themed scrollbar
 **Usage:** 17 in Forecast, 2 in charts. `index.css:607-624`
 ```jsx
-<div className="forecast-table-shell ace-scroll-shell">…</div>
+<div className="forecast-table-shell brand-scroll-shell">…</div>
 ```
 `scrollbar-width:thin`; thumb is `color-mix(in srgb, hsl(var(--foreground)) 26%, transparent)`, `999px` radius, 10px track. Pair with any scrolling container.
 
@@ -325,42 +325,42 @@ They share exactly three things: the token layer, the `ace-*` primitives (§B), 
   <CardContent>…</CardContent>
 </Card>
 ```
-**Tokens:** `--ace-panel` (fill), `--ace-line` (border), `--ace-shadow`
+**Tokens:** `--brand-panel` (fill), `--brand-line` (border), `--brand-shadow`
 **Base:** `border-radius:18px` — note this **overrides** the `rounded-xl` and `bg-card` that `ui/Card` applies, because the stylesheet wins. FINDINGS F-15.
-**vs `forecast-panel`:** same idea, different radius (18 vs 14), different fill token (`--ace-panel` vs `--ace-panel-strong`), and this one has a shadow. They are not interchangeable and should be.
+**vs `forecast-panel`:** same idea, different radius (18 vs 14), different fill token (`--brand-panel` vs `--brand-panel-strong`), and this one has a shadow. They are not interchangeable and should be.
 
-## B3. `ace-input` — the text input
+## B3. `brand-input` — the text input
 **Usage:** 6 in RMPF, also the base for `SelectTrigger`. `index.css` (~406)
 ```jsx
-<input className="ace-input" value={value} onChange={onChange} />
+<input className="brand-input" value={value} onChange={onChange} />
 ```
-**Tokens:** `--ace-input-bg`, `--ace-line-strong`, `--foreground`
+**Tokens:** `--brand-input-bg`, `--brand-line-strong`, `--foreground`
 **Note:** `select.js:12` reuses this class for `SelectTrigger`, so triggers and text inputs are deliberately identical.
 
-## B4. `ace-button-primary` / `-secondary` / `-danger`
+## B4. `brand-button-primary` / `-secondary` / `-danger`
 `index.css:437-454 / 456 / 475`. Pill (`999px`), `--primary` fill, hover `filter: brightness(0.96)`.
 **⚠** Only `-primary` is reachable through `ui/Button` — the other two require dropping to a raw `<button>`. FINDINGS F-16.
 
-## B5. `ace-floating-surface` / `ace-floating-item` — dropdown menu
+## B5. `brand-floating-surface` / `brand-floating-item` — dropdown menu
 **Usage:** Radix `SelectContent`/`SelectItem`, plus RMPF's portal menu. `index.css:~425-434`
 ```jsx
-<div className="ace-floating-surface fixed z-[9999] w-56 p-1">
-  <button className="ace-floating-item block w-full px-3 py-2 text-left text-sm">Duplicate</button>
+<div className="brand-floating-surface fixed z-[9999] w-56 p-1">
+  <button className="brand-floating-item block w-full px-3 py-2 text-left text-sm">Duplicate</button>
 </div>
 ```
 Item hover: `color-mix(in srgb, hsl(var(--primary)) 16%, transparent)`. **The one primitive genuinely shared by both products.**
 
-## B6. `ace-tooltip` / `ace-table-header` / `ace-chart-legend-text`
-`index.css:489-501`. Chart and table chrome, all on `--ace-panel-strong` + `--foreground`. Used by `ui/Tooltip`, the statement tables, and every chart legend.
+## B6. `brand-tooltip` / `brand-table-header` / `brand-chart-legend-text`
+`index.css:489-501`. Chart and table chrome, all on `--brand-panel-strong` + `--foreground`. Used by `ui/Tooltip`, the statement tables, and every chart legend.
 
-## B7. `ace-rm-overview` / `-eyebrow` / `-title` / `-description` / `ace-serif`
+## B7. `brand-rm-overview` / `-eyebrow` / `-title` / `-description` / `brand-serif`
 `index.css:337-380`. The RM Pro Forma hero band — the only Fraunces usage in the app.
 ```jsx
-<section className="ace-rm-overview">
-  <span className="ace-rm-eyebrow">OP_PRLX · rm-pro-forma</span>
-  <h1 className="ace-rm-title">Model every RM hire with
-    <span className="ace-serif text-primary"> hub-grade consistency.</span></h1>
-  <p className="ace-rm-description">…</p>
+<section className="brand-rm-overview">
+  <span className="brand-rm-eyebrow">OP_PRLX · rm-pro-forma</span>
+  <h1 className="brand-rm-title">Model every RM hire with
+    <span className="brand-serif text-primary"> hub-grade consistency.</span></h1>
+  <p className="brand-rm-description">…</p>
 </section>
 ```
 Eyebrow is the same mono/uppercase idiom as `forecast-section-code` (A5) with a `::before` dot in `--primary` — **the same component invented twice.**
@@ -374,12 +374,12 @@ Radix-based, Tailwind-styled, semantic-token-only. 3 files, 10 exports. Used alm
 | Export | File:line | Styling |
 |---|---|---|
 | `Accordion` / `Item` / `Trigger` / `Content` | `accordion.js` | Radix accordion. Trigger `text-base font-semibold text-foreground hover:text-primary`, chevron `text-muted-foreground` rotates on `[data-state=open]`. Animated via `tailwind.config.js:149-162` keyframes off `--radix-accordion-content-height`. |
-| `Select` (+7 parts) | `select.js` | Radix select. `SelectTrigger` = `ace-input`; `SelectContent` = `ace-floating-surface`, portalled; `SelectItem` = `ace-floating-item` + `data-[highlighted]:bg-primary/20`. |
+| `Select` (+7 parts) | `select.js` | Radix select. `SelectTrigger` = `brand-input`; `SelectContent` = `brand-floating-surface`, portalled; `SelectItem` = `brand-floating-item` + `data-[highlighted]:bg-primary/20`. |
 | `Slider`, `Label` | `index.js:5-26` | Radix. Track `bg-secondary`, Range/Thumb `bg-primary`, focus `ring-ring`. |
-| `Input` | `index.js:28-38` | Plain `<input className="ace-input …">`. |
+| `Input` | `index.js:28-38` | Plain `<input className="brand-input …">`. |
 | `Card` / `Header` / `Title` / `Content` | `index.js:40-79` | `rounded-xl border-border bg-card`; header `px-5 py-3`; title `text-lg font-semibold text-primary`; content `p-5 pt-0`. |
-| `Button` | `index.js:81-89` | `ace-button-primary` + disabled states. **Single variant.** |
-| `Tooltip` | `index.js:91-100` | `ace-tooltip p-2`. Not Radix — a plain div, no positioning or portal. |
+| `Button` | `index.js:81-89` | `brand-button-primary` + disabled states. **Single variant.** |
+| `Tooltip` | `index.js:91-100` | `brand-tooltip p-2`. Not Radix — a plain div, no positioning or portal. |
 
 **⚠ Two real defects here:**
 1. `index.js` and `select.js` concatenate `className` with raw template literals; only `accordion.js` imports `cn`. So `<CardContent className="p-0">` yields `"p-5 pt-0 p-0"` with no merge — a latent collision bug. FINDINGS F-17.
@@ -393,13 +393,13 @@ Radix-based, Tailwind-styled, semantic-token-only. 3 files, 10 exports. Used alm
 The signature RMPF control; every numeric field uses it. `RMProForma_Dashboard.js:163-243`
 
 ```jsx
-<input className={`ace-input ${flashDirection === 'up' ? 'text-accent'
+<input className={`brand-input ${flashDirection === 'up' ? 'text-accent'
                   : flashDirection === 'down' ? 'text-destructive' : 'text-foreground'} transition-colors duration-200`} />
 <button className="rounded-sm p-1 text-muted-foreground hover:bg-primary/15 hover:text-accent"><ChevronUp size={16}/></button>
 <button className="rounded-sm p-1 text-muted-foreground hover:bg-primary/15 hover:text-destructive"><ChevronDown size={16}/></button>
 ```
 
-**Tokens:** `--ace-input-bg`, `--ace-line-strong`, `--accent` (up), `--destructive` (down), `--primary` (hover wash)
+**Tokens:** `--brand-input-bg`, `--brand-line-strong`, `--accent` (up), `--destructive` (down), `--primary` (hover wash)
 **Behaviour:** value flashes for **300ms** on change (`:210`), colour keyed to direction.
 **⚠** This is a **third** up/down colour semantic — `--accent`/`--destructive`, where charts use `--chart-up`/`--chart-down`. FINDINGS F-02.
 
@@ -429,7 +429,7 @@ The signature RMPF control; every numeric field uses it. `RMProForma_Dashboard.j
 `RMProForma_Dashboard.js:703-757`. **Bare markup, no table class at all:** `<table className="w-full">`, cells `px-2 py-1`, each hosting a `CustomInput`. The third table implementation in the codebase. FINDINGS F-10.
 
 ## D5. Statement tables
-`MonthlyAnnualBalanceSheet.js`, `MonthlyAnnualIncomeStatement.js` — despite living in `components/charts/`, these render **zero** Recharts primitives. They are expand/collapse `<table>` components: `<table className="min-w-full">` in an `ace-scroll-shell`, header class on the `<tr>` (`ace-table-header`), sized by a scoped `<style jsx>` block of `custom-text-size-*` rules. See `CHARTS.md §7`.
+`MonthlyAnnualBalanceSheet.js`, `MonthlyAnnualIncomeStatement.js` — despite living in `components/charts/`, these render **zero** Recharts primitives. They are expand/collapse `<table>` components: `<table className="min-w-full">` in an `brand-scroll-shell`, header class on the `<tr>` (`brand-table-header`), sized by a scoped `<style jsx>` block of `custom-text-size-*` rules. See `CHARTS.md §7`.
 
 ---
 

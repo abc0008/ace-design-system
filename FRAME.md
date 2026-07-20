@@ -4,6 +4,14 @@
 
 Everything here is extracted from `frontend/src/index.css` in the BankAnalysis app, which remains canonical. `tokens.css` and `tokens.json` in this repo are mirrors; editing them changes nothing. If a statement here disagrees with `index.css`, `index.css` is right and this file is stale.
 
+> **Naming provenance.** This repo normalises the source app's brand prefixes: `--ace-*` → `--brand-*`,
+> `.ace-*` → `.brand-*`, `body.ace-hub-theme-active` → `body.brand-hub-theme-active`, `.ace-brand-mark` →
+> `.brand-mark`, and `--aa-ink`/`--aa-accent` → `--brand-ink`/`--brand-accent`. **The source application still
+> uses the original `ace-`/`aa-` prefixes.** So every `file:line` citation in this repo points at a source line
+> where the identifier appears with its original prefix — the line numbers are accurate, only the prefix differs.
+> Citations are not rewritten; see `README.md` § Naming provenance for the full mapping and the one token merge
+> (`--ace-ink` + `--aa-ink` → `--brand-ink`) it produces.
+
 ---
 
 ## 1. The shape of the system
@@ -14,10 +22,10 @@ Everything here is extracted from `frontend/src/index.css` in the BankAnalysis a
 |---|---|---|---|---|
 | shadcn semantic | 20 | bare HSL channels (+ `--radius`, a length) | all three blocks | `hsl(var(--x))` |
 | chart | 13 | bare HSL channels | all three blocks | `hsl(var(--chart-x))` |
-| ACE surface (`--ace-*`) | 10 | complete `rgba()` / hex / shadow values | **theme blocks only** | `var(--ace-x)` |
+| Brand surface (`--brand-*`) | 10 | complete `rgba()` / hex / shadow values | **theme blocks only** | `var(--brand-x)` |
 | component-scoped | 6 | mixed | on individual selectors | read by nearby rules only |
 
-20 + 13 + 10 + 6 = **49**. The first two families (33 properties) are the global scaffolding; the `--ace-*` family is the surface language; the component-scoped six are local variables that happen to use custom-property syntax.
+20 + 13 + 10 + 6 = **49**. The first two families (33 properties) are the global scaffolding; the `--brand-*` family is the surface language; the component-scoped six are local variables that happen to use custom-property syntax.
 
 Source lines: `:root` `index.css:7-51` · Theme A `55-107` · Theme B `115-167` · component-scoped `217-218` and `3792-3795`.
 
@@ -29,28 +37,28 @@ Source lines: `:root` `index.css:7-51` · Theme A `55-107` · Theme B `115-167` 
 
 ```
 :root                                            33 tokens   (20 shadcn + 13 chart)
-  │                                              light values, NO --ace-* family
+  │                                              light values, NO --brand-* family
   │
   ▼
-body.ace-hub-theme-active                        43 tokens   Theme A / light
-  │                                              same 33, restated + the 10 --ace-*
+body.brand-hub-theme-active                        43 tokens   Theme A / light
+  │                                              same 33, restated + the 10 --brand-*
   │
   ▼
-body.ace-hub-theme-active[data-direction='B']    43 tokens   Theme B / dark
+body.brand-hub-theme-active[data-direction='B']    43 tokens   Theme B / dark
                                                  same names, dark values
 ```
 
 | Selector | Role | Tokens |
 |---|---|---|
-| `:root` | Base scaffolding, light values. **No `--ace-*`** | 33 |
-| `body.ace-hub-theme-active` | Theme A / light | 43 |
-| `body.ace-hub-theme-active[data-direction='B']` | Theme B / dark | 43 |
+| `:root` | Base scaffolding, light values. **No `--brand-*`** | 33 |
+| `body.brand-hub-theme-active` | Theme A / light | 43 |
+| `body.brand-hub-theme-active[data-direction='B']` | Theme B / dark | 43 |
 
 Activation is three lines in `frontend/src/App.js:57-59`:
 
 ```js
 document.documentElement.setAttribute('data-direction', direction);
-document.body.classList.add('ace-hub-theme-active');
+document.body.classList.add('brand-hub-theme-active');
 document.body.setAttribute('data-direction', direction);
 ```
 
@@ -58,17 +66,17 @@ Note that `data-direction` is set on **both** `<html>` and `<body>`. The theme s
 
 ### 2.1 The hard rule (F-06)
 
-> **Anything that renders outside `body.ace-hub-theme-active` loses every `--ace-*` token.**
+> **Anything that renders outside `body.brand-hub-theme-active` loses every `--brand-*` token.**
 
 Not "degrades" — loses. The family is defined only inside that class, and `:root` has none of it. There is no fallback layer.
 
-What that costs you: `--ace-line` is the app's default border and the **second-most-consumed token in the codebase (179 uses)**. Also gone: every panel fill (`--ace-panel`, `--ace-panel-strong`), the input background (`--ace-input-bg`), elevation (`--ace-shadow`), and the positive/negative/warning value colours. Borders, fills and shadows all vanish **simultaneously and silently** — no console error, no invalid-property warning. The surface just renders flat and borderless and looks like a CSS load failure.
+What that costs you: `--brand-line` is the app's default border and the **second-most-consumed token in the codebase (179 uses)**. Also gone: every panel fill (`--brand-panel`, `--brand-panel-strong`), the input background (`--brand-input-bg`), elevation (`--brand-shadow`), and the positive/negative/warning value colours. Borders, fills and shadows all vanish **simultaneously and silently** — no console error, no invalid-property warning. The surface just renders flat and borderless and looks like a CSS load failure.
 
 The failure modes that actually hit this: a React portal mounted to a detached root, a print stylesheet, an isolated test render, a Storybook-style component harness, an email or PDF export path, an iframe.
 
-**If you build any harness that renders these components, put `class="ace-hub-theme-active"` on its `<body>` and `data-direction` on both `<html>` and `<body>`.** That is the entire reason `gallery.html` in this repo carries those attributes.
+**If you build any harness that renders these components, put `class="brand-hub-theme-active"` on its `<body>` and `data-direction` on both `<html>` and `<body>`.** That is the entire reason `gallery.html` in this repo carries those attributes.
 
-The standing recommendation (not yet applied to the app) is to duplicate the light `--ace-*` block into `:root` as a safe default. It is purely additive and changes nothing visually inside the app, because the theme block would still win by specificity — it just removes this whole class of failure.
+The standing recommendation (not yet applied to the app) is to duplicate the light `--brand-*` block into `:root` as a safe default. It is purely additive and changes nothing visually inside the app, because the theme block would still win by specificity — it just removes this whole class of failure.
 
 ---
 
@@ -96,22 +104,22 @@ The payoff for the awkwardness is free alpha — `hsl(var(--chart-up) / 0.4)` ne
 background: color-mix(in srgb, hsl(var(--primary)) 13%, transparent);
 ```
 
-### 3.2 Complete-value tokens — the `--ace-*` family (10 tokens)
+### 3.2 Complete-value tokens — the `--brand-*` family (10 tokens)
 
 These hold **finished values** — `rgba()`, hex, or a whole `box-shadow`. Consume them bare:
 
 ```css
-border: 1px solid var(--ace-line);             /* correct */
-background: var(--ace-panel-strong);           /* correct */
-box-shadow: var(--ace-shadow);                 /* correct — it's a full shadow value */
-color: var(--ace-positive);                    /* correct — it's a hex */
+border: 1px solid var(--brand-line);             /* correct */
+background: var(--brand-panel-strong);           /* correct */
+box-shadow: var(--brand-shadow);                 /* correct — it's a full shadow value */
+color: var(--brand-positive);                    /* correct — it's a hex */
 
-border: 1px solid hsl(var(--ace-line));        /* WRONG — double-wrapping */
+border: 1px solid hsl(var(--brand-line));        /* WRONG — double-wrapping */
 ```
 
-**The rule of thumb:** if the name starts with `--ace-`, use it bare. Everything else gets wrapped in `hsl()`.
+**The rule of thumb:** if the name starts with `--brand-`, use it bare. Everything else gets wrapped in `hsl()`.
 
-`--ace-shadow` deserves a flag: it is a shadow, not a colour. `0 20px 46px rgba(0, 0, 0, 0.11)` in light, `0 24px 56px rgba(0, 0, 0, 0.38)` in dark. It only ever belongs on the right-hand side of `box-shadow`.
+`--brand-shadow` deserves a flag: it is a shadow, not a colour. `0 20px 46px rgba(0, 0, 0, 0.11)` in light, `0 24px 56px rgba(0, 0, 0, 0.38)` in dark. It only ever belongs on the right-hand side of `box-shadow`.
 
 ---
 
@@ -127,7 +135,7 @@ Nineteen colours plus `--radius`. Defined in all three blocks.
 | `--card-foreground` | `0 0% 7%` | `0 0% 92%` | 1 | Text on card |
 | `--popover` | `0 0% 94%` | `0 0% 20%` | 0 | Tailwind-only |
 | `--popover-foreground` | `0 0% 7%` | `0 0% 92%` | 0 | Tailwind-only |
-| `--primary` | `40 100% 51%` | *invariant* | 103 | **ACE amber — the brand colour** |
+| `--primary` | `40 100% 51%` | *invariant* | 103 | **Amber — the brand colour** |
 | `--primary-foreground` | `0 0% 7%` | *invariant* | 7 | Ink on amber |
 | `--secondary` | `203 32% 22%` | `203 21% 53%` | 8 | Deep slate |
 | `--secondary-foreground` | `0 0% 98%` | `0 0% 7%` | 0 | Tailwind-only |
@@ -144,13 +152,13 @@ Nineteen colours plus `--radius`. Defined in all three blocks.
 
 Four facts about this table that matter more than the values:
 
-**`--muted-foreground` (223 uses) is the most-consumed token in the entire codebase**, ahead of `--ace-line` (179) and `--foreground` (136). Secondary text is the highest-volume design decision in this product. Changing it changes almost every screen.
+**`--muted-foreground` (223 uses) is the most-consumed token in the entire codebase**, ahead of `--brand-line` (179) and `--foreground` (136). Secondary text is the highest-volume design decision in this product. Changing it changes almost every screen.
 
 **Four tokens are theme-invariant by design** — `--primary`, `--primary-foreground`, `--accent`, `--ring` hold the same value in light and dark. The brand amber does not flip. `--primary-foreground` is dark ink (`0 0% 7%`) in *both* themes because amber is a light colour: **never put white on amber.**
 
 **Five tokens have zero direct `var()` consumers** — the `-foreground` pairs plus `--popover`. They are reachable only through Tailwind utilities. They are not dead, but a grep for `var(--accent-foreground)` will return nothing and that is expected.
 
-**`--border` and `--ace-line` are two answers to one question.** Tailwind `border-*` utilities resolve to `--border`; hand-written CSS overwhelmingly prefers `var(--ace-line)`. Both are live. Which one you want depends on which layer you are writing in — see `DESIGN.md` §2.
+**`--border` and `--brand-line` are two answers to one question.** Tailwind `border-*` utilities resolve to `--border`; hand-written CSS overwhelmingly prefers `var(--brand-line)`. Both are live. Which one you want depends on which layer you are writing in — see `DESIGN.md` §2.
 
 ### 4.1 `--radius` is defined and then ignored (F-27)
 
@@ -201,28 +209,28 @@ Tailwind also exposes all 13 as `theme.extend.colors.chart.*` (`tailwind.config.
 
 ---
 
-## 6. The ACE surface family (10)
+## 6. The Brand surface family (10)
 
-Complete values, consumed bare. **Defined only inside `body.ace-hub-theme-active` — see §2.1.**
+Complete values, consumed bare. **Defined only inside `body.brand-hub-theme-active` — see §2.1.**
 
 | Token | Light | Dark | Uses | Role |
 |---|---|---|---|---|
-| `--ace-nav-bg` | `rgba(235,235,235,0.88)` | `rgba(17,17,17,0.88)` | 1 | Translucent nav bar fill |
-| `--ace-panel` | `rgba(239,239,239,0.94)` | `rgba(36,36,36,0.92)` | 26 | `.card-wrapper` fill; segmented control track |
-| `--ace-panel-strong` | `rgba(235,235,235,1)` | `rgba(31,31,31,1)` | 34 | `.forecast-panel` fill (opaque); table headers; tooltips |
-| `--ace-line` | `rgba(17,17,17,0.14)` | `rgba(235,235,235,0.14)` | 179 | **THE DEFAULT BORDER** |
-| `--ace-line-strong` | `rgba(17,17,17,0.24)` | `rgba(235,235,235,0.30)` | 18 | Input and control borders |
-| `--ace-shadow` | `0 20px 46px rgba(0,0,0,0.11)` | `0 24px 56px rgba(0,0,0,0.38)` | 4 | Elevation — a shadow, not a colour |
-| `--ace-input-bg` | `rgba(255,255,255,0.72)` | `rgba(46,46,46,0.82)` | 8 | `.ace-input` and table input fill |
-| `--ace-positive` | `#739666` | `#85aa76` | 29 | Positive value **text** |
-| `--ace-negative` | `#d95f3d` | `#e6724f` | 26 | Negative value **text** |
-| `--ace-warning` | `#a97800` | `#e1bb45` | 8 | Caution state |
+| `--brand-nav-bg` | `rgba(235,235,235,0.88)` | `rgba(17,17,17,0.88)` | 1 | Translucent nav bar fill |
+| `--brand-panel` | `rgba(239,239,239,0.94)` | `rgba(36,36,36,0.92)` | 26 | `.card-wrapper` fill; segmented control track |
+| `--brand-panel-strong` | `rgba(235,235,235,1)` | `rgba(31,31,31,1)` | 34 | `.forecast-panel` fill (opaque); table headers; tooltips |
+| `--brand-line` | `rgba(17,17,17,0.14)` | `rgba(235,235,235,0.14)` | 179 | **THE DEFAULT BORDER** |
+| `--brand-line-strong` | `rgba(17,17,17,0.24)` | `rgba(235,235,235,0.30)` | 18 | Input and control borders |
+| `--brand-shadow` | `0 20px 46px rgba(0,0,0,0.11)` | `0 24px 56px rgba(0,0,0,0.38)` | 4 | Elevation — a shadow, not a colour |
+| `--brand-input-bg` | `rgba(255,255,255,0.72)` | `rgba(46,46,46,0.82)` | 8 | `.brand-input` and table input fill |
+| `--brand-positive` | `#739666` | `#85aa76` | 29 | Positive value **text** |
+| `--brand-negative` | `#d95f3d` | `#e6724f` | 26 | Negative value **text** |
+| `--brand-warning` | `#a97800` | `#e1bb45` | 8 | Caution state |
 
-**`--ace-panel` vs `--ace-panel-strong`** is the one distinction worth memorising: `panel` is translucent (`0.94` / `0.92` alpha) and lets whatever is behind it show through; `panel-strong` is fully opaque. `.card-wrapper` uses the translucent one, `.forecast-panel` the opaque one — which is a large part of why the two card surfaces do not look interchangeable even though they should be.
+**`--brand-panel` vs `--brand-panel-strong`** is the one distinction worth memorising: `panel` is translucent (`0.94` / `0.92` alpha) and lets whatever is behind it show through; `panel-strong` is fully opaque. `.card-wrapper` uses the translucent one, `.forecast-panel` the opaque one — which is a large part of why the two card surfaces do not look interchangeable even though they should be.
 
-**`--ace-positive` / `--ace-negative` are text colours, not chart colours.** They are close to but not identical with `--chart-up` / `--chart-down`, and the split is real: use the `--ace-*` pair for a signed number in a table cell, the `--chart-*` pair for a mark in a chart. See `DESIGN.md` §4.3 for why the codebase has both and which to reach for.
+**`--brand-positive` / `--brand-negative` are text colours, not chart colours.** They are close to but not identical with `--chart-up` / `--chart-down`, and the split is real: use the `--brand-*` pair for a signed number in a table cell, the `--chart-*` pair for a mark in a chart. See `DESIGN.md` §4.3 for why the codebase has both and which to reach for.
 
-Only `--ace-warning` has no counterpart in any other family. There is no `--chart-warning` and no shadcn warning token; amber caution states elsewhere borrow `--primary`.
+Only `--brand-warning` has no counterpart in any other family. There is no `--chart-warning` and no shadcn warning token; amber caution states elsewhere borrow `--primary`.
 
 ---
 
@@ -232,8 +240,8 @@ Not global tokens. These are set on specific selectors and read by rules nearby.
 
 | Property | Set on | Value | Source |
 |---|---|---|---|
-| `--aa-ink` | `.ace-brand-mark` | `hsl(var(--foreground))` | `index.css:217` |
-| `--aa-accent` | `.ace-brand-mark` | `hsl(var(--primary))` | `index.css:218` |
+| `--brand-ink` | `.brand-mark` | `hsl(var(--foreground))` | `index.css:217` |
+| `--brand-accent` | `.brand-mark` | `hsl(var(--primary))` | `index.css:218` |
 | `--section-color` | `#forecast-*` section ids | hard-coded hex (below) | `index.css:3792-3795` |
 | `--section-progress` | accordion | `50%` default | `index.css:3954` |
 | `--waterfall-count` | waterfall chart markup | set inline | — |
@@ -260,36 +268,36 @@ Every one of these resolves to its inline fallback, in **both** themes. The `var
 
 | Phantom token | `var()` uses | Always renders |
 |---|---|---|
-| `--ace-red` | 9 | `#c4554d` |
-| `--ace-chart-2` | 8 | `#6b7c93` |
-| `--ace-moss` | 5 | `#5d8a66` |
-| `--ace-gold` | 3 | `#FFAC03` |
-| `--ace-danger` | 3 | `#e5241d` |
+| `--brand-red` | 9 | `#c4554d` |
+| `--brand-chart-2` | 8 | `#6b7c93` |
+| `--brand-moss` | 5 | `#5d8a66` |
+| `--brand-gold` | 3 | `#FFAC03` |
+| `--brand-danger` | 3 | `#e5241d` |
 | `--font-mono` | 3 | inline stack |
-| `--ace-chart-3` | 2 | `#9aa7b8` |
-| `--ace-lust` | 2 | inline hex |
-| `--ace-shadow-soft` | 2 | **nothing — see below** |
-| `--ace-smokescreen` | 1 | inline hex |
-| `--ace-ink` | 1 | inline hex |
+| `--brand-chart-3` | 2 | `#9aa7b8` |
+| `--brand-lust` | 2 | inline hex |
+| `--brand-shadow-soft` | 2 | **nothing — see below** |
+| `--brand-smokescreen` | 1 | inline hex |
+| `--brand-ink` | 1 | inline hex |
 
-**`--ace-shadow-soft` is a live bug, not just a naming problem.** It is written with **no fallback** at `index.css:4888` and `4927`:
+**`--brand-shadow-soft` is a live bug, not just a naming problem.** It is written with **no fallback** at `index.css:4888` and `4927`:
 
 ```css
-box-shadow: var(--ace-shadow-soft);   /* property undefined, no fallback */
+box-shadow: var(--brand-shadow-soft);   /* property undefined, no fallback */
 ```
 
-With the property undefined this resolves to the guaranteed-invalid value and the declaration is dropped at computed-value time. **Those two elements have no shadow at all and never have.** Use `var(--ace-shadow)` instead.
+With the property undefined this resolves to the guaranteed-invalid value and the declaration is dropped at computed-value time. **Those two elements have no shadow at all and never have.** Use `var(--brand-shadow)` instead.
 
 ### 8.1 Do not "fix" these by defining them
 
-Defining a phantom token changes rendered output immediately and everywhere it is referenced. Defining `--ace-chart-2` would instantly re-colour six charts that currently render `#6b7c93`.
+Defining a phantom token changes rendered output immediately and everywhere it is referenced. Defining `--brand-chart-2` would instantly re-colour six charts that currently render `#6b7c93`.
 
 The two defensible moves, decided per token:
 
 1. **Map it to a real token** and accept the visual change deliberately, as a reviewed diff.
 2. **Delete the `var()` wrapper and keep the literal.** Uglier, but it tells the truth about what renders.
 
-`--ace-shadow-soft` is the exception — it should be defined or its two rules deleted, because the current state is a straight defect rather than a misleading indirection.
+`--brand-shadow-soft` is the exception — it should be defined or its two rules deleted, because the current state is a straight defect rather than a misleading indirection.
 
 ---
 
@@ -307,7 +315,7 @@ https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=In
 |---|---|---|
 | Body / UI default | `'Inter Tight', system-ui, sans-serif` | Everything |
 | Mono | `'JetBrains Mono', monospace` | Section codes, chips, tabular figures, table `th` |
-| Display | `Fraunces`, italic 500, via `.ace-serif` | RM Pro Forma hero **only** |
+| Display | `Fraunces`, italic 500, via `.brand-serif` | RM Pro Forma hero **only** |
 
 **The mono treatment is a fixed formula, not a free choice:** always 10–11px, uppercase, `letter-spacing` 0.06–0.12em. Every section code, chip, and table header in the product follows it. Mono at 14px lowercase would be off-system.
 
@@ -340,13 +348,13 @@ Three colour systems exist in config or code and render nowhere, or render outsi
 
 The arithmetic this produces: **five distinct greens** (`#739666`, `#85aa76`, `#02a88e`, `#2f9e6e`, `#5d8a66`) and **six distinct reds** (`#d95f3d`, `#e6724f`, `#e5241d`, `#e61d24`, `#d9534f`, `#c4554d`) live in one codebase. A designer asking "what is the app's green?" currently gets three defensible answers.
 
-**The answer FRAME gives:** `hsl(var(--chart-up))` and `hsl(var(--chart-down))` for marks, `var(--ace-positive)` and `var(--ace-negative)` for text. Nothing else.
+**The answer FRAME gives:** `hsl(var(--chart-up))` and `hsl(var(--chart-down))` for marks, `var(--brand-positive)` and `var(--brand-negative)` for text. Nothing else.
 
 ---
 
 ## 11. Adding a token
 
-1. Add it to **all three blocks** in `index.css` — `:root`, `body.ace-hub-theme-active`, and the `[data-direction='B']` variant. Skipping the dark block is the common mistake and it fails silently in exactly one theme.
+1. Add it to **all three blocks** in `index.css` — `:root`, `body.brand-hub-theme-active`, and the `[data-direction='B']` variant. Skipping the dark block is the common mistake and it fails silently in exactly one theme.
 2. Decide its format deliberately: HSL channels if it is a colour that wants free alpha; a complete value if it is a shadow, a translucent surface, or a literal hex.
 3. If it should be reachable as a Tailwind utility, wire it into `tailwind.config.js` too.
 4. Mirror it into `tokens.css` and `tokens.json` in this repo, including its usage count and theme values.

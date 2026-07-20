@@ -12,7 +12,7 @@ Read `FRAME.md` first — the theme rule in FRAME §2.1 and the two consumption 
   TOKENS          49 custom properties                     FRAME.md
     │             the vocabulary of values
     ▼
-  PRIMITIVES      ace-*  (29 selectors)                    COMPONENTS.md §B
+  PRIMITIVES      brand-*  (29 selectors)                    COMPONENTS.md §B
     │             the de-facto SHARED layer — both products, token-backed
     │             components/ui/ (10 React exports, Radix + Tailwind)
     ▼
@@ -35,13 +35,13 @@ Forecast and RM Pro Forma **barely share a vocabulary.**
 |---|---|---|
 | `forecast-*` classNames | **1,846** | **0** |
 | Distinct `forecast-*` selectors | 249 | — |
-| `ace-*` classNames | 24 | 16 |
+| `brand-*` classNames | 24 | 16 |
 | Styling approach | hand-written CSS classes | `components/ui/` + Tailwind utilities |
 | Inline `style={{}}` | 194 | 8 |
 
-They share exactly three things: **the token layer, the `ace-*` primitives, and `card-wrapper`.** Everything else is parallel invention.
+They share exactly three things: **the token layer, the `brand-*` primitives, and `card-wrapper`.** Everything else is parallel invention.
 
-This is not a bug to fix this quarter, but it is the thing to know before touching either product. It also sets the direction: **`ace-*` is where consolidation goes.** All 29 of its selectors are token-backed, none contains a hard-coded colour, and it is the only layer both products already speak.
+This is not a bug to fix this quarter, but it is the thing to know before touching either product. It also sets the direction: **`brand-*` is where consolidation goes.** All 29 of its selectors are token-backed, none contains a hard-coded colour, and it is the only layer both products already speak.
 
 ---
 
@@ -57,21 +57,21 @@ Decide this first; it determines everything downstream.
 
 Do not mix the two in one screen. A Forecast panel built from Tailwind utilities, or an RMPF card built from `forecast-*` classes, is how the third vocabulary gets born.
 
-### 2.2 When to reach for `ace-*` vs invent a product class
+### 2.2 When to reach for `brand-*` vs invent a product class
 
-**Reach for an existing `ace-*` primitive when the thing you need is a surface, a control chrome, or a scroll/overlay behaviour.** That is what the layer covers:
+**Reach for an existing `brand-*` primitive when the thing you need is a surface, a control chrome, or a scroll/overlay behaviour.** That is what the layer covers:
 
 | Need | Use | Not |
 |---|---|---|
-| Scrolling container | `.ace-scroll-shell` | a bespoke `::-webkit-scrollbar` block |
-| Text input, select trigger | `.ace-input` | a Tailwind input recipe |
-| Dropdown / portal menu | `.ace-floating-surface` + `.ace-floating-item` | a new popover surface |
-| Chart or table tooltip | `.ace-tooltip` | an inline Recharts `contentStyle` object |
-| Table header chrome | `.ace-table-header` | restyling `th` per table |
-| Chart legend text | `.ace-chart-legend-text` | inline legend styles |
-| Pill button | `.ace-button-primary` / `-secondary` / `-danger` | a new button class |
+| Scrolling container | `.brand-scroll-shell` | a bespoke `::-webkit-scrollbar` block |
+| Text input, select trigger | `.brand-input` | a Tailwind input recipe |
+| Dropdown / portal menu | `.brand-floating-surface` + `.brand-floating-item` | a new popover surface |
+| Chart or table tooltip | `.brand-tooltip` | an inline Recharts `contentStyle` object |
+| Table header chrome | `.brand-table-header` | restyling `th` per table |
+| Chart legend text | `.brand-chart-legend-text` | inline legend styles |
+| Pill button | `.brand-button-primary` / `-secondary` / `-danger` | a new button class |
 
-`.ace-floating-surface` is the one primitive genuinely shared by both products today — Radix `SelectContent`/`SelectItem` and RMPF's portal menu both land on it. Treat it as the model for what a good shared primitive looks like.
+`.brand-floating-surface` is the one primitive genuinely shared by both products today — Radix `SelectContent`/`SelectItem` and RMPF's portal menu both land on it. Treat it as the model for what a good shared primitive looks like.
 
 **Invent a product class only when all three are true:**
 
@@ -93,7 +93,7 @@ If you are about to build a fifth distribution track, the correct move is to gen
 
 Three vocabularies already exist: `forecast-*`, RMPF's Tailwind compositions, and `modules/close-intel/closeIntel.css` (2,185 lines, not catalogued here). A fourth is not free — it doubles the surface a designer has to hold in their head and guarantees that the next shared primitive gets written three times.
 
-New product surface goes into the `ace-*` layer if it is reusable, or into an existing product vocabulary if it is not. It does not get its own namespace.
+New product surface goes into the `brand-*` layer if it is reusable, or into an existing product vocabulary if it is not. It does not get its own namespace.
 
 ---
 
@@ -106,13 +106,13 @@ Full markup and evidence in `PATTERNS.md`. This is the routing table.
 | **P1** Panel + head + body | **Always — the default.** Every content block in the product | `.forecast-panel` › `.forecast-panel-head` › (`.forecast-section-code` + `h2`) › body |
 | **P2** Action bar + note | A panel accepts input and needs a decision footer | `.forecast-submit-chips`/`-actions` › buttons › `.forecast-submit-note` |
 | **P3** Read table | Narrow tabular data — roster, log, summary — read-only, needs an empty state | `.forecast-home-table-wrap` › `table.forecast-home-table` |
-| **P4** Dense matrix | Wide **editable** numeric grid; where forecasting actually happens | `.forecast-table-shell.ace-scroll-shell` › `table.forecast-table` |
+| **P4** Dense matrix | Wide **editable** numeric grid; where forecasting actually happens | `.forecast-table-shell.brand-scroll-shell` › `table.forecast-table` |
 | **P5** Workspace stage flow | A linear multi-step model builder, one stage at a time | stage nav › `.workspace-stage-panel` › `.forecast-accordion` › `.workspace-action-row` |
 | **P6** Labelled distribution track | A label, a horizontal track, markers positioned by `left:%` | **four existing implementations — pick one, don't add** |
 | **P7** Stat strip | A row of label/value pairs above the fold | `.forecast-status-strip` (span+strong) or `.forecast-kpi-grid` (span+strong+small) |
 | **P8** Notification / audit list | Unread-aware item list in a popover, or its audit-trail table twin | `.forecast-notif-panel.forecast-panel` › `.forecast-notif-list` |
 | **P9** AI prompt / narrative box | Plain-English input that drafts a change; four explicit states | `.forecast-prompt-box` › `.forecast-prompt-input` |
-| **P10** RM Pro Forma entry workspace | Anything in RMPF | `.ace-rm-overview` hero › entry tab pills › `Card.card-wrapper` |
+| **P10** RM Pro Forma entry workspace | Anything in RMPF | `.brand-rm-overview` hero › entry tab pills › `Card.card-wrapper` |
 
 ### 3.1 P1 is the spine — and it has a hard rule
 
@@ -126,7 +126,7 @@ Variants: `.forecast-panel-lite`, `.forecast-panel-tall`, `.forecast-subpanel` (
 
 ### 3.2 P3 vs P4 — pick by editability, not by width
 
-Both are tables and they are otherwise unalike in every respect. **P3 is read-oriented** — a roster or log, needs an empty state, sign-coloured numerics via `.pos`/`.neg`, row actions as `.forecast-home-action.ghost`. **P4 is the dense editable grid** — always inside `.forecast-table-shell.ace-scroll-shell`, often `.forecast-compact-table`, columns carry `.time-col`/`.yt` classes.
+Both are tables and they are otherwise unalike in every respect. **P3 is read-oriented** — a roster or log, needs an empty state, sign-coloured numerics via `.pos`/`.neg`, row actions as `.forecast-home-action.ghost`. **P4 is the dense editable grid** — always inside `.forecast-table-shell.brand-scroll-shell`, often `.forecast-compact-table`, columns carry `.time-col`/`.yt` classes.
 
 Choosing P3 for an editable grid gets you a table with no scroll shell that breaks at width. Choosing P4 for a five-row summary gets you scroll chrome you do not need.
 
@@ -177,7 +177,7 @@ Two conventions coexist. **Match the one where your chart lives**; do not import
 | Grid dash | `"3 3"` | `"3 5"` |
 | Grid direction | both axes | `vertical={false}` |
 | Tick font size | 12 | 10–11 |
-| Legend | `formatter` + `.ace-chart-legend-text` | `wrapperStyle` inline |
+| Legend | `formatter` + `.brand-chart-legend-text` | `wrapperStyle` inline |
 | Tooltip | per-file `contentStyle` object | shared `tooltipStyle` from `vm` |
 | Line weight | `strokeWidth={3}` primary | `strokeWidth={2}` |
 
@@ -204,11 +204,11 @@ The `vm` bag (F-20) is a deliberate pattern with a real benefit — stages impor
 
 ```css
 /* signed numbers as text, in a table cell */
-color: var(--ace-positive);
-color: var(--ace-negative);
+color: var(--brand-positive);
+color: var(--brand-negative);
 ```
 
-**Charts get `--chart-up`/`--chart-down`; text gets `--ace-positive`/`--ace-negative`.** They are close but not identical, and the split is intentional — the text pair is tuned for legibility at small sizes on a panel fill, the chart pair for area and stroke against a grid.
+**Charts get `--chart-up`/`--chart-down`; text gets `--brand-positive`/`--brand-negative`.** They are close but not identical, and the split is intentional — the text pair is tuned for legibility at small sizes on a panel fill, the chart pair for area and stroke against a grid.
 
 The three systems you must **not** use: the ad-hoc `GREEN`/`RED` JS constants (six files, cannot respond to theme), the dead Tailwind `icon.*` palette, and any raw hex.
 
@@ -221,10 +221,10 @@ Note the existing asymmetry so you recognise it rather than copy it: `.forecast-
 Three tooltip implementations exist. **Prefer the custom-content one:**
 
 ```jsx
-<Tooltip content={customTooltip} />   // renders <div className="ace-tooltip">
+<Tooltip content={customTooltip} />   // renders <div className="brand-tooltip">
 ```
 
-`.ace-tooltip` (`index.css:495-501`) is token-backed and theme-safe. The inline `contentStyle` objects duplicate that styling by hand, in two mutually inconsistent ways (`backgroundColor` + `borderRadius:'10px'` versus `background` + `'12px'`).
+`.brand-tooltip` (`index.css:495-501`) is token-backed and theme-safe. The inline `contentStyle` objects duplicate that styling by hand, in two mutually inconsistent ways (`backgroundColor` + `borderRadius:'10px'` versus `background` + `'12px'`).
 
 ### 4.5 Chart checklist
 
@@ -278,14 +278,14 @@ Why it matters beyond tidiness: writing `className="forecast-health-chip green"`
 
 The recommended fix is a mechanical rename to token-derived or status-semantic names (`.tone-primary`/`.tone-accent`/`.tone-destructive`/`.tone-neutral`, or `.ok`/`.watch`/`.breach`), collapsing the duplicate pairs, in **one commit across all call sites**. Leaving old and new names side by side is exactly how this happened.
 
-### 5.4 Borders — `--ace-line` or `--border`?
+### 5.4 Borders — `--brand-line` or `--border`?
 
 Both are live and they answer the same question in different layers.
 
-- **Hand-written CSS → `var(--ace-line)`.** It is the app's default border, 179 uses, and it is what every `forecast-*` and `ace-*` surface uses.
+- **Hand-written CSS → `var(--brand-line)`.** It is the app's default border, 179 uses, and it is what every `forecast-*` and `brand-*` surface uses.
 - **Tailwind utilities → `--border`**, reached via `border-*`. You get this automatically; do not fight it.
 
-Do not reach across: writing `border: 1px solid hsl(var(--border))` in hand-written CSS is off-system, and so is a Tailwind arbitrary value pointing at `--ace-line`.
+Do not reach across: writing `border: 1px solid hsl(var(--border))` in hand-written CSS is off-system, and so is a Tailwind arbitrary value pointing at `--brand-line`.
 
 ---
 
@@ -295,12 +295,12 @@ Drawn from `FINDINGS.md`. Each entry cites the finding.
 
 ### Do
 
-- **Do wrap HSL-channel tokens in `hsl()`** and consume `--ace-*` bare. (FRAME §3)
-- **Do set `class="ace-hub-theme-active"` on `<body>`** in any harness, portal root, print or export path that renders these components — plus `data-direction` on both `<html>` and `<body>`. (F-06)
-- **Do use one up/down pair:** `--chart-up`/`--chart-down` for marks, `--ace-positive`/`--ace-negative` for text. (F-02)
+- **Do wrap HSL-channel tokens in `hsl()`** and consume `--brand-*` bare. (FRAME §3)
+- **Do set `class="brand-hub-theme-active"` on `<body>`** in any harness, portal root, print or export path that renders these components — plus `data-direction` on both `<html>` and `<body>`. (F-06)
+- **Do use one up/down pair:** `--chart-up`/`--chart-down` for marks, `--brand-positive`/`--brand-negative` for text. (F-02)
 - **Do check `FINDINGS.md` for a duplicate before adding a component.** Four distribution tracks, three table conventions, two stat strips already exist. (F-21, F-10, F-22)
-- **Do reuse `ace-*` primitives** for surfaces, controls, overlays and scroll chrome — it is the only layer both products share. (F-09)
-- **Do use `.ace-tooltip`** rather than an inline Recharts `contentStyle`. (CHARTS §Tooltips)
+- **Do reuse `brand-*` primitives** for surfaces, controls, overlays and scroll chrome — it is the only layer both products share. (F-09)
+- **Do use `.brand-tooltip`** rather than an inline Recharts `contentStyle`. (CHARTS §Tooltips)
 - **Do put `aria-pressed` on segmented controls** — half of them are missing it today. (F-14)
 - **Do rename across all call sites in one commit** when you fix a naming defect. (F-28)
 - **Do follow the mono formula** — 10–11px, uppercase, `letter-spacing` 0.06–0.12em — for section codes, chips, and table headers. (FRAME §9)
@@ -309,9 +309,9 @@ Drawn from `FINDINGS.md`. Each entry cites the finding.
 
 - **Don't hard-code a hex.** 17 files under `pages/forecasting/` already do, and the highest offenders carry 6–7 each. Check `tokens.json` first. (F-04)
 - **Don't use the `GOLD`/`GREEN`/`RED` JS constants.** Redeclared in six files, and the only colours in the product that cannot respond to the theme. (F-02)
-- **Don't write a `var()` fallback for a phantom token.** All 11 resolve to their fallback in both themes — `var(--ace-chart-2, #6b7c93)` *looks* theme-aware in review and is not. It is a hard-coded hex wearing a costume. (F-01)
-- **Don't define a phantom token to "fix" it.** Defining `--ace-chart-2` instantly re-colours six charts. Decide per token: map deliberately, or drop the wrapper and keep the literal. (F-01)
-- **Don't use `var(--ace-shadow-soft)`.** It is undefined *and* written with no fallback at `index.css:4888, 4927`, so the declaration is dropped and those elements have no shadow at all. Use `var(--ace-shadow)`. (F-01)
+- **Don't write a `var()` fallback for a phantom token.** All 11 resolve to their fallback in both themes — `var(--brand-chart-2, #6b7c93)` *looks* theme-aware in review and is not. It is a hard-coded hex wearing a costume. (F-01)
+- **Don't define a phantom token to "fix" it.** Defining `--brand-chart-2` instantly re-colours six charts. Decide per token: map deliberately, or drop the wrapper and keep the literal. (F-01)
+- **Don't use `var(--brand-shadow-soft)`.** It is undefined *and* written with no fallback at `index.css:4888, 4927`, so the declaration is dropped and those elements have no shadow at all. Use `var(--brand-shadow)`. (F-01)
 - **Don't invent a second vocabulary per product.** Three already exist; a fourth guarantees the next shared primitive gets written four times. (F-09)
 - **Don't use `.forecast-chip-button`.** Used in three files, defined in zero — it renders as an unstyled browser-default button. That is a visible defect, not a tidiness issue. (F-19)
 - **Don't trust chip tone names.** `.green` renders amber; `.yellow` renders green. Use `.red`/`.neutral` or read F-28. (F-28)
@@ -326,7 +326,7 @@ Drawn from `FINDINGS.md`. Each entry cites the finding.
 ## 7. Before you commit
 
 1. **Does it render in both themes?** Toggle `data-direction` A → B and look. Most drift in this codebase is dark-mode-only.
-2. **Does it render outside `body.ace-hub-theme-active`?** If the component can ever mount in a portal, print view, or test harness, check it there too. (F-06)
+2. **Does it render outside `body.brand-hub-theme-active`?** If the component can ever mount in a portal, print view, or test harness, check it there too. (F-06)
 3. **Is every colour a token?** `grep` your diff for `#`.
 4. **Did you add a class that already exists under another name?** Check `FINDINGS.md`.
 5. **If it is a chart:** `stroke`, `tick.fill`, and grid stroke all set from tokens; no JS colour constants; no `console.log`.

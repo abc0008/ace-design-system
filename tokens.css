@@ -8,19 +8,19 @@
 
    THEME MODEL — there is no `.dark` class. Themes are:
      :root                                          base scaffolding (light values)
-     body.ace-hub-theme-active                      Theme A / light  (adds --ace-*)
-     body.ace-hub-theme-active[data-direction='B']  Theme B / dark
-   Activation: frontend/src/App.js:57-59 sets `ace-hub-theme-active` on <body>
+     body.brand-hub-theme-active                      Theme A / light  (adds --brand-*)
+     body.brand-hub-theme-active[data-direction='B']  Theme B / dark
+   Activation: frontend/src/App.js:57-59 sets `brand-hub-theme-active` on <body>
    and `data-direction` on BOTH <html> and <body>. App.js:76 also puts the
-   `ace-hub-theme` class on the root <div>.
+   `brand-hub-theme` class on the root <div>.
 
-   IMPORTANT: :root does NOT define the --ace-* family. Any surface that renders
-   outside `body.ace-hub-theme-active` gets no ace tokens at all — borders and
+   IMPORTANT: :root does NOT define the --brand-* family. Any surface that renders
+   outside `body.brand-hub-theme-active` gets no brand tokens at all — borders and
    panel fills silently collapse. See FINDINGS.md F-06.
 
    Colour tokens are stored as BARE HSL CHANNELS ("40 100% 51%"), not colours.
-   Always consume them wrapped: hsl(var(--primary)). The --ace-* family is the
-   exception: those are complete rgba()/hex values, consumed bare: var(--ace-line).
+   Always consume them wrapped: hsl(var(--primary)). The --brand-* family is the
+   exception: those are complete rgba()/hex values, consumed bare: var(--brand-line).
    ========================================================================== */
 
 
@@ -39,7 +39,7 @@
   --popover-foreground: 0 0% 7%;   /* Tailwind-only */
 
   /* --- Brand / intent --------------------------------------------------- */
-  --primary: 40 100% 51%;          /* ACE amber           ≈ #FFAD05  THE brand colour */
+  --primary: 40 100% 51%;          /* Amber           ≈ #FFAD05  THE brand colour */
   --primary-foreground: 0 0% 7%;   /* ink on amber (amber is light — never white) */
   --secondary: 203 32% 22%;        /* deep slate          ≈ #264757 */
   --secondary-foreground: 0 0% 98%;
@@ -81,11 +81,11 @@
 
 /* -----------------------------------------------------------------------------
    2. THEME A — LIGHT  (index.css:55-107)
-   body.ace-hub-theme-active
+   body.brand-hub-theme-active
    Re-declares all 33 base tokens at identical light values, THEN adds the
-   10-token --ace-* family that the products actually build on.
+   10-token --brand-* family that the products actually build on.
    -------------------------------------------------------------------------- */
-body.ace-hub-theme-active {
+body.brand-hub-theme-active {
   /* Identical to :root above — repeated verbatim in the source. */
   --background: 0 0% 92%;
   --foreground: 0 0% 7%;
@@ -120,27 +120,27 @@ body.ace-hub-theme-active {
   --chart-grid: 0 0% 76%;
   --chart-axis: 0 0% 42%;
 
-  /* --- ACE surface family (10) — the real workhorses --------------------- */
-  /* Complete colour values, NOT hsl channels. Consume bare: var(--ace-line). */
-  --ace-nav-bg:       rgba(235, 235, 235, 0.88);  /* translucent nav bar */
-  --ace-panel:        rgba(239, 239, 239, 0.94);  /* card-wrapper fill */
-  --ace-panel-strong: rgba(235, 235, 235, 1);     /* forecast-panel fill (opaque) */
-  --ace-line:         rgba(17, 17, 17, 0.14);     /* DEFAULT BORDER — 179 uses, #2 overall */
-  --ace-line-strong:  rgba(17, 17, 17, 0.24);     /* input + control borders */
-  --ace-shadow:       0 20px 46px rgba(0, 0, 0, 0.11);  /* a shadow, not a colour */
-  --ace-input-bg:     rgba(255, 255, 255, 0.72);
-  --ace-positive:     #739666;                    /* ≈ --accent / --chart-up */
-  --ace-negative:     #d95f3d;                    /* ≈ --destructive / --chart-down */
-  --ace-warning:      #a97800;
+  /* --- Brand surface family (10) — the real workhorses --------------------- */
+  /* Complete colour values, NOT hsl channels. Consume bare: var(--brand-line). */
+  --brand-nav-bg:       rgba(235, 235, 235, 0.88);  /* translucent nav bar */
+  --brand-panel:        rgba(239, 239, 239, 0.94);  /* card-wrapper fill */
+  --brand-panel-strong: rgba(235, 235, 235, 1);     /* forecast-panel fill (opaque) */
+  --brand-line:         rgba(17, 17, 17, 0.14);     /* DEFAULT BORDER — 179 uses, #2 overall */
+  --brand-line-strong:  rgba(17, 17, 17, 0.24);     /* input + control borders */
+  --brand-shadow:       0 20px 46px rgba(0, 0, 0, 0.11);  /* a shadow, not a colour */
+  --brand-input-bg:     rgba(255, 255, 255, 0.72);
+  --brand-positive:     #739666;                    /* ≈ --accent / --chart-up */
+  --brand-negative:     #d95f3d;                    /* ≈ --destructive / --chart-down */
+  --brand-warning:      #a97800;
 }
 
 
 /* -----------------------------------------------------------------------------
    3. THEME B — DARK  (index.css:115-167)
-   body.ace-hub-theme-active[data-direction='B']
+   body.brand-hub-theme-active[data-direction='B']
    The app's "direction" toggle. B is the dark theme.
    -------------------------------------------------------------------------- */
-body.ace-hub-theme-active[data-direction='B'] {
+body.brand-hub-theme-active[data-direction='B'] {
   --background: 0 0% 7%;
   --foreground: 0 0% 92%;
   --card: 0 0% 20%;
@@ -175,16 +175,16 @@ body.ace-hub-theme-active[data-direction='B'] {
   --chart-grid: 0 0% 30%;
   --chart-axis: 0 0% 68%;
 
-  --ace-nav-bg:       rgba(17, 17, 17, 0.88);
-  --ace-panel:        rgba(36, 36, 36, 0.92);
-  --ace-panel-strong: rgba(31, 31, 31, 1);
-  --ace-line:         rgba(235, 235, 235, 0.14);
-  --ace-line-strong:  rgba(235, 235, 235, 0.3);
-  --ace-shadow:       0 24px 56px rgba(0, 0, 0, 0.38);
-  --ace-input-bg:     rgba(46, 46, 46, 0.82);
-  --ace-positive:     #85aa76;
-  --ace-negative:     #e6724f;
-  --ace-warning:      #e1bb45;
+  --brand-nav-bg:       rgba(17, 17, 17, 0.88);
+  --brand-panel:        rgba(36, 36, 36, 0.92);
+  --brand-panel-strong: rgba(31, 31, 31, 1);
+  --brand-line:         rgba(235, 235, 235, 0.14);
+  --brand-line-strong:  rgba(235, 235, 235, 0.3);
+  --brand-shadow:       0 24px 56px rgba(0, 0, 0, 0.38);
+  --brand-input-bg:     rgba(46, 46, 46, 0.82);
+  --brand-positive:     #85aa76;
+  --brand-negative:     #e6724f;
+  --brand-warning:      #e1bb45;
 }
 
 
@@ -193,9 +193,9 @@ body.ace-hub-theme-active[data-direction='B'] {
    -------------------------------------------------------------------------- */
 
 /* index.css:217-218 — aliases scoped to the brand mark only. */
-.ace-brand-mark {
-  --aa-ink:    hsl(var(--foreground));
-  --aa-accent: hsl(var(--primary));
+.brand-mark {
+  --brand-ink:    hsl(var(--foreground));
+  --brand-accent: hsl(var(--primary));
 }
 
 /* index.css:3792-3795 — per-section identity colour, set by element id and read
@@ -217,17 +217,17 @@ body.ace-hub-theme-active[data-direction='B'] {
    COMMENTED OUT, because defining them would silently change the rendered app.
    See FINDINGS.md F-01 before acting.
 
-     --ace-chart-2     8 uses   always renders #6b7c93
-     --ace-chart-3     2 uses   always renders #9aa7b8
-     --ace-red         9 uses   always renders #c4554d
-     --ace-moss        5 uses   always renders #5d8a66
-     --ace-gold        3 uses   always renders #FFAC03
-     --ace-danger      3 uses   always renders #e5241d
-     --ace-lust        2 uses
-     --ace-smokescreen 1 use
-     --ace-ink         1 use
+     --brand-chart-2     8 uses   always renders #6b7c93
+     --brand-chart-3     2 uses   always renders #9aa7b8
+     --brand-red         9 uses   always renders #c4554d
+     --brand-moss        5 uses   always renders #5d8a66
+     --brand-gold        3 uses   always renders #FFAC03
+     --brand-danger      3 uses   always renders #e5241d
+     --brand-lust        2 uses
+     --brand-smokescreen 1 use
+     --brand-ink         1 use
      --font-mono       3 uses
-     --ace-shadow-soft 2 uses   NO FALLBACK — box-shadow silently drops
+     --brand-shadow-soft 2 uses   NO FALLBACK — box-shadow silently drops
 */
 
 
@@ -239,7 +239,7 @@ body.ace-hub-theme-active[data-direction='B'] {
 
    'Inter Tight', system-ui, sans-serif   body / UI default
    'JetBrains Mono', monospace            all codes, chips, tabular figures, th
-   Fraunces (italic 500)                  .ace-serif — display accent, RM Pro Forma only
+   Fraunces (italic 500)                  .brand-serif — display accent, RM Pro Forma only
 
    There is no font token. Families are written as literal stacks at ~40 sites.
    tailwind.config.js:114-118 declares an 'Avenir Pro' family that is never

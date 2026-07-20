@@ -10,7 +10,7 @@
 
 ## The `--chart-*` palette
 
-13 tokens, defined identically in `:root` (`index.css:38-50`), `body.ace-hub-theme-active` (`84-96`), and `[data-direction='B']` (`144-156`). **9 are live, 4 are dead.**
+13 tokens, defined identically in `:root` (`index.css:38-50`), `body.brand-hub-theme-active` (`84-96`), and `[data-direction='B']` (`144-156`). **9 are live, 4 are dead.**
 
 | Token | Light | Dark | Alias of | Status | Role |
 |---|---|---|---|---|---|
@@ -60,7 +60,7 @@ Two conventions coexist. **Pick the one matching where your chart lives.**
 
 ```jsx
 const axisTickStyle  = { fill: 'hsl(var(--chart-axis))', fontSize: 12 };
-const legendFormatter = (value) => <span className="ace-chart-legend-text">{value}</span>;
+const legendFormatter = (value) => <span className="brand-chart-legend-text">{value}</span>;
 
 <div className="h-64">
   <ResponsiveContainer width="100%" height="100%">
@@ -108,7 +108,7 @@ const { CartesianGrid, ComposedChart, XAxis, YAxis, Tooltip, Legend, Line, Bar,
 | Grid dash | `"3 3"` | `"3 5"` |
 | Grid direction | both axes | `vertical={false}` (horizontal only) |
 | Tick font size | 12 | 10-11 |
-| Legend | `formatter` + `.ace-chart-legend-text` | `wrapperStyle` inline |
+| Legend | `formatter` + `.brand-chart-legend-text` | `wrapperStyle` inline |
 | Tooltip | per-file `contentStyle` object | shared `tooltipStyle` from `vm` |
 | Colour source | inline `hsl(var(--chart-N))` | `chartAxisColor` consts; series still inline |
 
@@ -118,9 +118,9 @@ const { CartesianGrid, ComposedChart, XAxis, YAxis, Tooltip, Legend, Line, Bar,
 ### Tooltips — three implementations
 1. `contentStyle` with `backgroundColor` (`AssetBalanceChart.js:134-138`, `NetIncomeChart.js:63-67`)
 2. `contentStyle` with `background` and `borderRadius:'12px'` (`RMProForma_YieldCurve.js:56-59`) — same intent, different key and radius
-3. Custom `content={customTooltip}` rendering `<div className="ace-tooltip">` (`RMProForma_FinancialStatements.js:71-87`, `RMProForma_Payback.js:74-89`)
+3. Custom `content={customTooltip}` rendering `<div className="brand-tooltip">` (`RMProForma_FinancialStatements.js:71-87`, `RMProForma_Payback.js:74-89`)
 
-**Prefer (3)** — `.ace-tooltip` (`index.css:495-501`) is token-backed and theme-safe; the inline `contentStyle` objects duplicate that styling by hand.
+**Prefer (3)** — `.brand-tooltip` (`index.css:495-501`) is token-backed and theme-safe; the inline `contentStyle` objects duplicate that styling by hand.
 
 ---
 
@@ -136,8 +136,8 @@ const { CartesianGrid, ComposedChart, XAxis, YAxis, Tooltip, Legend, Line, Bar,
 
 Plus a fourth in RM Pro Forma's input flash: `--accent` up / `--destructive` down (`RMProForma_Dashboard.js:221`).
 
-**Every distinct green in the codebase:** `#739666`/`#85aa76` (`--ace-positive`), `#02a88e` (Tailwind, dead), `#2f9e6e` (ad-hoc, 6 files), `#5d8a66` (`--ace-moss` fallback).
-**Every distinct red:** `#d95f3d`/`#e6724f` (`--ace-negative`), `#e5241d`/`#e61d24` (Tailwind, dead), `#d9534f` (ad-hoc, 6 files), `#c4554d` (`--ace-red` fallback).
+**Every distinct green in the codebase:** `#739666`/`#85aa76` (`--brand-positive`), `#02a88e` (Tailwind, dead), `#2f9e6e` (ad-hoc, 6 files), `#5d8a66` (`--brand-moss` fallback).
+**Every distinct red:** `#d95f3d`/`#e6724f` (`--brand-negative`), `#e5241d`/`#e61d24` (Tailwind, dead), `#d9534f` (ad-hoc, 6 files), `#c4554d` (`--brand-red` fallback).
 
 **Asymmetry worth knowing:** `.forecast-home-table .pos` uses `--chart-up` but `.neg` uses `--destructive`, *not* `--chart-down` (`index.css:2871-2874`). Safe only because those two tokens hold identical values.
 
@@ -202,8 +202,8 @@ Tests stub the slice with plain hex: `chartAxisColor: '#000', chartGridColor: '#
 3. Series colours in order: `hsl(var(--chart-1))` → `--chart-5`. Never a hex literal.
 4. Directional colour: `--chart-up` / `--chart-down`. Never `GREEN`/`RED` constants.
 5. Grid `stroke="hsl(var(--chart-grid))"`; axes `stroke` + `tick.fill` `hsl(var(--chart-axis))`. **Always set all three** — omitting them is what breaks dark mode.
-6. Tooltip: custom `content` rendering `.ace-tooltip`.
-7. Legend: `formatter` returning `<span className="ace-chart-legend-text">`.
+6. Tooltip: custom `content` rendering `.brand-tooltip`.
+7. Legend: `formatter` returning `<span className="brand-chart-legend-text">`.
 8. Accept and render `isLoading` and `error`.
 9. `ResponsiveContainer width="100%" height="100%"` inside a fixed-height wrapper.
 10. No `console.log`.

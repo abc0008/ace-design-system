@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ACE Analytics Design System — Gallery</title>
+<title>Brand Design System — Gallery</title>
 
 <!-- VENDORED SNAPSHOT of the app stylesheet, so this repo is self-contained.
      Source: BankAnalysis frontend/src/index.css @ e0a75cb (branch claude/close-intel), copied 2026-07-20.
@@ -19,12 +19,12 @@
 
   .gx-top { position: sticky; top: 0; z-index: 50; display: flex; align-items: center;
             justify-content: space-between; gap: 16px; padding: 14px 24px;
-            background: var(--ace-nav-bg, hsl(var(--card))); backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--ace-line, hsl(var(--border))); }
+            background: var(--brand-nav-bg, hsl(var(--card))); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--brand-line, hsl(var(--border))); }
   .gx-top h1 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
   .gx-top p  { margin: 2px 0 0; font-size: 11px; color: hsl(var(--muted-foreground)); }
   .gx-toggle { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px;
-               border: 1px solid var(--ace-line, hsl(var(--border))); }
+               border: 1px solid var(--brand-line, hsl(var(--border))); }
   .gx-toggle button { border: 0; background: transparent; color: hsl(var(--foreground));
                       font: 600 12px 'Inter Tight', system-ui, sans-serif; cursor: pointer;
                       padding: 7px 14px; border-radius: 999px; }
@@ -33,20 +33,20 @@
   .gx-sec { margin: 44px 0 0; }
   .gx-sec > h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em;
                  font-family: 'JetBrains Mono', monospace; color: hsl(var(--muted-foreground));
-                 border-bottom: 1px solid var(--ace-line, hsl(var(--border)));
+                 border-bottom: 1px solid var(--brand-line, hsl(var(--border)));
                  padding-bottom: 8px; margin-bottom: 18px; }
   .gx-sub { margin: 26px 0 10px; font-size: 13px; font-weight: 600; }
   .gx-note { font-size: 12px; line-height: 1.6; color: hsl(var(--muted-foreground)); margin: 0 0 14px; }
-  .gx-specimen { border: 1px dashed var(--ace-line, hsl(var(--border))); border-radius: 12px;
+  .gx-specimen { border: 1px dashed var(--brand-line, hsl(var(--border))); border-radius: 12px;
                  padding: 18px; margin-bottom: 18px; }
   .gx-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; text-transform: uppercase;
               letter-spacing: 0.1em; color: hsl(var(--muted-foreground)); margin-bottom: 10px; }
 
   /* Token swatch grid */
   .gx-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(206px, 1fr)); gap: 10px; }
-  .gx-sw { border: 1px solid var(--ace-line, hsl(var(--border))); border-radius: 10px; overflow: hidden;
-           background: var(--ace-panel-strong, hsl(var(--card))); }
-  .gx-sw-chip { height: 46px; border-bottom: 1px solid var(--ace-line, hsl(var(--border)));
+  .gx-sw { border: 1px solid var(--brand-line, hsl(var(--border))); border-radius: 10px; overflow: hidden;
+           background: var(--brand-panel-strong, hsl(var(--card))); }
+  .gx-sw-chip { height: 46px; border-bottom: 1px solid var(--brand-line, hsl(var(--border)));
                 background-image: linear-gradient(45deg,rgba(128,128,128,.16) 25%,transparent 25%,transparent 75%,rgba(128,128,128,.16) 75%),
                                   linear-gradient(45deg,rgba(128,128,128,.16) 25%,transparent 25%,transparent 75%,rgba(128,128,128,.16) 75%);
                 background-size: 12px 12px; background-position: 0 0, 6px 6px; }
@@ -71,17 +71,17 @@
              font-size: 12.5px; line-height: 1.65; }
   .gx-snap code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; }
   .gx-snap strong { display: block; margin-bottom: 4px; }
-  .gx-shadow-demo { height: 62px; border-radius: 14px; background: var(--ace-panel-strong);
-                    box-shadow: var(--ace-shadow); border: 1px solid var(--ace-line); }
+  .gx-shadow-demo { height: 62px; border-radius: 14px; background: var(--brand-panel-strong);
+                    box-shadow: var(--brand-shadow); border: 1px solid var(--brand-line); }
 </style>
 </head>
 
-<!-- ace-hub-theme-active is REQUIRED: the --ace-* family is defined only inside it (FINDINGS F-06). -->
-<body class="ace-hub-theme-active ace-hub-theme" data-direction="A">
+<!-- brand-hub-theme-active is REQUIRED: the --brand-* family is defined only inside it (FINDINGS F-06). -->
+<body class="brand-hub-theme-active brand-hub-theme" data-direction="A">
 
 <div class="gx-top">
   <div>
-    <h1>ACE Analytics Design System — Gallery</h1>
+    <h1>Brand Design System — Gallery</h1>
     <p>Live specimens against a vendored snapshot of <code>index.css</code> — see the snapshot banner below</p>
   </div>
   <div class="gx-toggle" role="group" aria-label="Theme direction">
@@ -100,15 +100,24 @@
     <b>can drift from the running app</b> and nothing in this repo will warn you when it does. Treat any
     specimen as evidence about the snapshot, not a guarantee about production.
     <br /><br />
-    Refresh it in one line, from the repo root:
-    <br /><code>cp /path/to/BankAnalysis/frontend/src/index.css styles/index.snapshot.css</code>
+    <b>&#9888; Refreshing this snapshot must re-apply the de-brand rename.</b> This repo normalises the app's
+    <code>ace-</code>/<code>aa-</code> prefixes to <code>brand-</code>, and this page references the renamed
+    identifiers &mdash; so a bare <code>cp</code> reverts the stylesheet and every specimen below silently loses
+    its borders, panel fills and shadows. Copy <b>and</b> rewrite, from the repo root:
+    <br /><code>cp /path/to/BankAnalysis/frontend/src/index.css styles/index.snapshot.css &amp;&amp; perl -pi -e
+    's/(?&lt;![\w-])ace-brand(?![\w])/brand/g; s/--aa-ink(?![\w-])/--brand-ink/g;
+    s/--aa-accent(?![\w-])/--brand-accent/g; s/--ace-/--brand-/g; s/(?&lt;![\w-])ace-/brand-/g;'
+    styles/index.snapshot.css</code>
+    <br />The <code>(?&lt;![\w-])</code> lookbehind is load-bearing: a naive <code>s/ace/brand/g</code> would
+    corrupt <code>space</code>, <code>replace</code>, <code>interface</code> and <code>workspace</code> (286 such
+    words in the snapshot). See <code>README.md</code> &sect; Naming provenance.
   </div>
 
   <div class="gx-warn">
     <strong>Two things this page cannot show</strong>
     1. <code>index.css</code> contains <code>@tailwind</code> directives that only resolve through the PostCSS build.
     Loaded raw here, <b>no Tailwind utility class works</b> — so RM Pro Forma specimens (which are built from
-    utilities) render structurally but unstyled. The Forecast and <code>ace-*</code> specimens are hand-written CSS
+    utilities) render structurally but unstyled. The Forecast and <code>brand-*</code> specimens are hand-written CSS
     and render exactly as in the app.
     2. Fonts load from Google Fonts via <code>@import</code>; offline, everything falls back to system stacks.
   </div>
@@ -128,19 +137,19 @@
     <h3 class="gx-sub">Chart palette (13)</h3>
     <div class="gx-swatches" id="sw-chart"></div>
 
-    <h3 class="gx-sub">ACE surface (10) — defined only under <code>body.ace-hub-theme-active</code></h3>
-    <div class="gx-swatches" id="sw-ace"></div>
+    <h3 class="gx-sub">Brand surface (10) — defined only under <code>body.brand-hub-theme-active</code></h3>
+    <div class="gx-swatches" id="sw-brand"></div>
 
     <h3 class="gx-sub">Elevation</h3>
     <div class="gx-specimen">
-      <div class="gx-label">--ace-shadow</div>
+      <div class="gx-label">--brand-shadow</div>
       <div class="gx-shadow-demo"></div>
     </div>
 
     <h3 class="gx-sub">Phantom tokens — referenced in the app, defined nowhere (FINDINGS F-01)</h3>
     <p class="gx-note">
       These resolve to <em>nothing</em>. Each swatch below shows the fallback hex the app actually renders.
-      An empty swatch would be the truthful rendering of <code>var(--ace-chart-2)</code> with no fallback.
+      An empty swatch would be the truthful rendering of <code>var(--brand-chart-2)</code> with no fallback.
     </p>
     <div class="gx-swatches" id="sw-phantom"></div>
 
@@ -151,7 +160,7 @@
         Inter Tight — body and UI default. Net interest income rose 4.2% against plan.</p>
       <p style="font-family:'JetBrains Mono',monospace;font-size:11px;margin:0 0 10px;text-transform:uppercase;letter-spacing:0.1em">
         JetBrains Mono — codes, chips, tabular figures, table headers</p>
-      <p class="ace-serif" style="font-size:22px;margin:0">Fraunces italic — display accent, RM Pro Forma hero only</p>
+      <p class="brand-serif" style="font-size:22px;margin:0">Fraunces italic — display accent, RM Pro Forma hero only</p>
     </div>
   </section>
 
@@ -219,22 +228,22 @@
       <p class="forecast-submit-note error-list">Reviewer must return the package before re-anchoring.</p>
     </div>
 
-    <h3 class="gx-sub">B · shared ace-* primitives</h3>
+    <h3 class="gx-sub">B · shared brand-* primitives</h3>
     <div class="gx-specimen">
-      <div class="gx-label">ace-input · ace-button-primary / -secondary / -danger</div>
+      <div class="gx-label">brand-input · brand-button-primary / -secondary / -danger</div>
       <div class="forecast-submit-chips" style="align-items:center">
-        <input class="ace-input" value="1,284.60" style="width:150px" aria-label="Demo input" />
-        <button type="button" class="ace-button-primary">Primary</button>
-        <button type="button" class="ace-button-secondary">Secondary</button>
-        <button type="button" class="ace-button-danger">Danger</button>
+        <input class="brand-input" value="1,284.60" style="width:150px" aria-label="Demo input" />
+        <button type="button" class="brand-button-primary">Primary</button>
+        <button type="button" class="brand-button-secondary">Secondary</button>
+        <button type="button" class="brand-button-danger">Danger</button>
       </div>
-      <div class="gx-label" style="margin-top:16px">ace-floating-surface / ace-floating-item</div>
-      <div class="ace-floating-surface" style="width:220px;padding:4px">
-        <button type="button" class="ace-floating-item" style="display:block;width:100%;text-align:left;padding:8px 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer">Duplicate entry</button>
-        <button type="button" class="ace-floating-item" style="display:block;width:100%;text-align:left;padding:8px 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer">Export to Excel</button>
+      <div class="gx-label" style="margin-top:16px">brand-floating-surface / brand-floating-item</div>
+      <div class="brand-floating-surface" style="width:220px;padding:4px">
+        <button type="button" class="brand-floating-item" style="display:block;width:100%;text-align:left;padding:8px 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer">Duplicate entry</button>
+        <button type="button" class="brand-floating-item" style="display:block;width:100%;text-align:left;padding:8px 12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer">Export to Excel</button>
       </div>
-      <div class="gx-label" style="margin-top:16px">ace-tooltip</div>
-      <div class="ace-tooltip" style="display:inline-block;padding:8px 10px">
+      <div class="gx-label" style="margin-top:16px">brand-tooltip</div>
+      <div class="brand-tooltip" style="display:inline-block;padding:8px 10px">
         <div style="font-size:13px;font-weight:600">Net interest income</div>
         <div style="font-size:12px;color:hsl(var(--muted-foreground))">FY2026 plan · $MM</div>
       </div>
@@ -312,7 +321,7 @@
             <h2>Balance sheet build, by forecast year</h2>
           </div>
         </div>
-        <div class="forecast-table-shell ace-scroll-shell forecast-compact-table">
+        <div class="forecast-table-shell brand-scroll-shell forecast-compact-table">
           <table class="forecast-table">
             <thead><tr>
               <th>Metric · $MM</th><th>FY2024</th><th>FY2025</th><th>FY2026</th><th>FY2027</th><th>FY2028</th>
@@ -384,16 +393,16 @@
     <h3 class="gx-sub">P10 · RM Pro Forma workspace — <span style="color:hsl(var(--destructive))">Tailwind utilities do not resolve here</span></h3>
     <p class="gx-note">
       Structure is faithful; the utility-driven colour and spacing are absent because Tailwind is unbuilt in this
-      context. <code>ace-rm-*</code> and <code>card-wrapper</code> are hand-written CSS and <em>do</em> render.
+      context. <code>brand-rm-*</code> and <code>card-wrapper</code> are hand-written CSS and <em>do</em> render.
     </p>
-    <section class="ace-rm-overview">
-      <span class="ace-rm-eyebrow">OP_PRLX · rm-pro-forma</span>
-      <h1 class="ace-rm-title">Model every RM hire with <span class="ace-serif">hub-grade consistency.</span></h1>
-      <p class="ace-rm-description">Five-year pro forma for a relationship manager, with payback and yield-curve sensitivity.</p>
+    <section class="brand-rm-overview">
+      <span class="brand-rm-eyebrow">OP_PRLX · rm-pro-forma</span>
+      <h1 class="brand-rm-title">Model every RM hire with <span class="brand-serif">hub-grade consistency.</span></h1>
+      <p class="brand-rm-description">Five-year pro forma for a relationship manager, with payback and yield-curve sensitivity.</p>
     </section>
     <div class="card-wrapper" style="margin-top:18px;padding:18px">
       <div style="font-size:15px;font-weight:600;margin-bottom:4px">Assumptions</div>
-      <div style="font-size:12px;color:hsl(var(--muted-foreground))">card-wrapper — radius 18px, --ace-panel fill, --ace-shadow</div>
+      <div style="font-size:12px;color:hsl(var(--muted-foreground))">card-wrapper — radius 18px, --brand-panel fill, --brand-shadow</div>
     </div>
   </section>
 
@@ -481,7 +490,7 @@
       ['--background','Surface','App canvas'], ['--foreground','Surface','Primary text — 136 uses'],
       ['--card','Surface','Card fill; chart tooltip bg'], ['--card-foreground','Surface','Text on card'],
       ['--popover','Surface','Tailwind-only',1], ['--popover-foreground','Surface','Tailwind-only',1],
-      ['--primary','Brand','ACE amber — THE brand colour, 103 uses'],
+      ['--primary','Brand','Amber — THE brand colour, 103 uses'],
       ['--primary-foreground','Brand','Ink on amber'],
       ['--secondary','Brand','Deep slate'], ['--secondary-foreground','Brand','Tailwind-only',1],
       ['--muted','Brand','Muted surface'], ['--muted-foreground','Brand','Secondary text — 223 uses, #1'],
@@ -502,28 +511,28 @@
       ['--chart-neutral','Directional','DEAD — 0 uses',1],
       ['--chart-grid','Chrome','Every CartesianGrid'], ['--chart-axis','Chrome','Every axis + tick — 33 uses']
     ],
-    'sw-ace': [
-      ['--ace-nav-bg','Surface','Translucent nav bar'], ['--ace-panel','Surface','card-wrapper fill'],
-      ['--ace-panel-strong','Surface','forecast-panel fill — 34 uses'],
-      ['--ace-line','Line','THE default border — 179 uses, #2 overall'],
-      ['--ace-line-strong','Line','Input + control borders'],
-      ['--ace-input-bg','Surface','ace-input fill'],
-      ['--ace-positive','Semantic','Positive value text'], ['--ace-negative','Semantic','Negative value text'],
-      ['--ace-warning','Semantic','Caution state'], ['--ace-shadow','Elevation','Shadow value, not a colour']
+    'sw-brand': [
+      ['--brand-nav-bg','Surface','Translucent nav bar'], ['--brand-panel','Surface','card-wrapper fill'],
+      ['--brand-panel-strong','Surface','forecast-panel fill — 34 uses'],
+      ['--brand-line','Line','THE default border — 179 uses, #2 overall'],
+      ['--brand-line-strong','Line','Input + control borders'],
+      ['--brand-input-bg','Surface','brand-input fill'],
+      ['--brand-positive','Semantic','Positive value text'], ['--brand-negative','Semantic','Negative value text'],
+      ['--brand-warning','Semantic','Caution state'], ['--brand-shadow','Elevation','Shadow value, not a colour']
     ],
     'sw-phantom': [
-      ['--ace-chart-2','8 uses','always renders #6b7c93'], ['--ace-chart-3','2 uses','always renders #9aa7b8'],
-      ['--ace-red','9 uses','always renders #c4554d'], ['--ace-moss','5 uses','always renders #5d8a66'],
-      ['--ace-gold','3 uses','always renders #FFAC03'], ['--ace-danger','3 uses','always renders #e5241d'],
-      ['--ace-lust','2 uses','inline hex fallback'], ['--ace-smokescreen','1 use','inline hex fallback'],
-      ['--ace-ink','1 use','inline hex fallback'], ['--font-mono','3 uses','inline stack fallback'],
-      ['--ace-shadow-soft','2 uses','NO FALLBACK — shadow silently drops']
+      ['--brand-chart-2','8 uses','always renders #6b7c93'], ['--brand-chart-3','2 uses','always renders #9aa7b8'],
+      ['--brand-red','9 uses','always renders #c4554d'], ['--brand-moss','5 uses','always renders #5d8a66'],
+      ['--brand-gold','3 uses','always renders #FFAC03'], ['--brand-danger','3 uses','always renders #e5241d'],
+      ['--brand-lust','2 uses','inline hex fallback'], ['--brand-smokescreen','1 use','inline hex fallback'],
+      ['--brand-ink','1 use','inline hex fallback'], ['--font-mono','3 uses','inline stack fallback'],
+      ['--brand-shadow-soft','2 uses','NO FALLBACK — shadow silently drops']
     ]
   };
   var PHANTOM_FALLBACK = {
-    '--ace-chart-2':'#6b7c93','--ace-chart-3':'#9aa7b8','--ace-red':'#c4554d','--ace-moss':'#5d8a66',
-    '--ace-gold':'#FFAC03','--ace-danger':'#e5241d','--ace-lust':'#e5241d','--ace-smokescreen':'#595959',
-    '--ace-ink':'#242424','--font-mono':'transparent','--ace-shadow-soft':'transparent'
+    '--brand-chart-2':'#6b7c93','--brand-chart-3':'#9aa7b8','--brand-red':'#c4554d','--brand-moss':'#5d8a66',
+    '--brand-gold':'#FFAC03','--brand-danger':'#e5241d','--brand-lust':'#e5241d','--brand-smokescreen':'#595959',
+    '--brand-ink':'#242424','--font-mono':'transparent','--brand-shadow-soft':'transparent'
   };
 
   function paint() {
@@ -543,7 +552,7 @@
           shown = raw ? raw : '(undefined)';
         } else if (!raw) {
           swatchColor = 'transparent'; shown = '(undefined)';
-        } else if (name === '--ace-shadow') {
+        } else if (name === '--brand-shadow') {
           swatchColor = 'transparent'; shown = raw;
         } else if (name === '--radius') {
           swatchColor = 'transparent'; shown = raw;
@@ -559,8 +568,8 @@
         chip.className = 'gx-sw-chip';
         var fill = document.createElement('span');
         fill.style.background = swatchColor;
-        if (name === '--ace-shadow') { fill.style.boxShadow = raw; fill.style.margin = '8px'; fill.style.height = 'calc(100% - 16px)';
-                                       fill.style.background = 'var(--ace-panel-strong)'; fill.style.borderRadius = '6px'; }
+        if (name === '--brand-shadow') { fill.style.boxShadow = raw; fill.style.margin = '8px'; fill.style.height = 'calc(100% - 16px)';
+                                       fill.style.background = 'var(--brand-panel-strong)'; fill.style.borderRadius = '6px'; }
         chip.appendChild(fill);
         var meta = document.createElement('div');
         meta.className = 'gx-sw-meta';

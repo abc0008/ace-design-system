@@ -15,7 +15,7 @@ Severity: **High** = renders wrong, silently broken, or actively misleading · *
 | F-03 | **High** | An entire dead brand palette + its 100-line compatibility shim |
 | F-04 | Medium | Hard-coded hex bypassing tokens in 17 files |
 | F-05 | Medium | 4 dead chart tokens, 5 Tailwind-only tokens |
-| F-06 | **High** | `--ace-*` family absent from `:root` — unthemed surfaces lose all borders |
+| F-06 | **High** | `--brand-*` family absent from `:root` — unthemed surfaces lose all borders |
 | F-07 | Medium | Duplicate and triplicate CSS definitions |
 | F-08 | Low | Declared-but-absent Avenir Pro font family |
 | F-09 | **High** | Forecast and RM Pro Forma share almost no vocabulary |
@@ -47,28 +47,28 @@ Eleven custom properties are consumed via `var()` in the app and defined in **ze
 
 | Token | `var()` uses | Always renders | Notable sites |
 |---|---|---|---|
-| `--ace-red` | 9 | `#c4554d` | `ForecastProjects.js:307`; several `index.css` rules in the 4200-4400 band |
-| `--ace-chart-2` | 8 | `#6b7c93` | `ForecastExecView.js:20`, `ForecastNiiBuildup.js:7`, `ForecastOp03Suite.js:19`, `ForecastReviewConsole.js:1259, 1281`, `ForecastReviewDetail.js:476, 511` |
-| `--ace-moss` | 5 | `#5d8a66` | `ForecastReviewConsole.js:1284`; `index.css` pulse/bridge rules |
-| `--ace-gold` | 3 | `#FFAC03` | `stages/CorporateProjectSpreadStage.js:422, 533, 658` |
-| `--ace-danger` | 3 | `#e5241d` | `ForecastBulkActionBar.js:97`, `ForecastCommentThreadPanel.js:182` |
+| `--brand-red` | 9 | `#c4554d` | `ForecastProjects.js:307`; several `index.css` rules in the 4200-4400 band |
+| `--brand-chart-2` | 8 | `#6b7c93` | `ForecastExecView.js:20`, `ForecastNiiBuildup.js:7`, `ForecastOp03Suite.js:19`, `ForecastReviewConsole.js:1259, 1281`, `ForecastReviewDetail.js:476, 511` |
+| `--brand-moss` | 5 | `#5d8a66` | `ForecastReviewConsole.js:1284`; `index.css` pulse/bridge rules |
+| `--brand-gold` | 3 | `#FFAC03` | `stages/CorporateProjectSpreadStage.js:422, 533, 658` |
+| `--brand-danger` | 3 | `#e5241d` | `ForecastBulkActionBar.js:97`, `ForecastCommentThreadPanel.js:182` |
 | `--font-mono` | 3 | inline stack | `index.css` (3 rules) |
-| `--ace-chart-3` | 2 | `#9aa7b8` | `ForecastReviewConsole.js:1260, 1283` |
-| `--ace-lust` | 2 | inline hex | `index.css` |
-| `--ace-shadow-soft` | 2 | **nothing** | `index.css:4888, 4927` |
-| `--ace-smokescreen` | 1 | inline hex | `index.css` |
-| `--ace-ink` | 1 | inline hex | `index.css` |
+| `--brand-chart-3` | 2 | `#9aa7b8` | `ForecastReviewConsole.js:1260, 1283` |
+| `--brand-lust` | 2 | inline hex | `index.css` |
+| `--brand-shadow-soft` | 2 | **nothing** | `index.css:4888, 4927` |
+| `--brand-smokescreen` | 1 | inline hex | `index.css` |
+| `--brand-ink` | 1 | inline hex | `index.css` |
 
-**Why it matters:** `var(--ace-chart-2, #6b7c93)` *looks* theme-aware in review and is not. Every one of these resolves to its fallback in both light and dark. The `var()` wrapper is decorative.
+**Why it matters:** `var(--brand-chart-2, #6b7c93)` *looks* theme-aware in review and is not. Every one of these resolves to its fallback in both light and dark. The `var()` wrapper is decorative.
 
-**`--ace-shadow-soft` is worse** — it is written with **no fallback**:
+**`--brand-shadow-soft` is worse** — it is written with **no fallback**:
 ```css
 /* index.css:4888 and 4927 */
-box-shadow: var(--ace-shadow-soft);
+box-shadow: var(--brand-shadow-soft);
 ```
 With the property undefined this resolves to the guaranteed-invalid value and the declaration is dropped. **Those two elements have no shadow at all and never have.**
 
-**Recommend:** don't define these blind — defining `--ace-chart-2` would instantly change six charts. Decide per token: either (a) map to a real token and accept the visual change deliberately, or (b) delete the `var()` wrapper and keep the literal, which at least tells the truth. `--ace-shadow-soft` should be defined or the two rules deleted; that one is a straight bug.
+**Recommend:** don't define these blind — defining `--brand-chart-2` would instantly change six charts. Decide per token: either (a) map to a real token and accept the visual change deliberately, or (b) delete the `var()` wrapper and keep the literal, which at least tells the truth. `--brand-shadow-soft` should be defined or the two rules deleted; that one is a straight bug.
 
 ---
 
@@ -96,10 +96,10 @@ With the property undefined this resolves to the guaranteed-invalid value and th
 
 `tailwind.config.js:91-104` declares a 12-colour `brand` palette (mulberry `#8f0f56`, lust `#e5241d`, hobgoblin `#02a88e`, caribbean-blue `#00bed5`, pigeon, white-smoke, nero, smokescreen, input-fill, tamahagane, mt-rushmore, lust-border).
 
-`index.css:503-601` then contains ~100 lines of compatibility shim remapping every one of those utilities onto semantic tokens whenever `body.ace-hub-theme-active` is on:
+`index.css:503-601` then contains ~100 lines of compatibility shim remapping every one of those utilities onto semantic tokens whenever `body.brand-hub-theme-active` is on:
 ```css
-.ace-hub-theme .text-brand-mulberry,
-body.ace-hub-theme-active .text-brand-mulberry { color: hsl(var(--primary)); }
+.brand-hub-theme .text-brand-mulberry,
+body.brand-hub-theme-active .text-brand-mulberry { color: hsl(var(--primary)); }
 ```
 
 **Usages of any `brand-*` utility in `frontend/src`: zero.** (verified by grep across all `.js`)
@@ -142,22 +142,22 @@ The distinction matters: a naive "unused token" sweep flags all nine. Only the f
 
 ---
 
-## F-06 · `--ace-*` absent from `:root` · **High**
+## F-06 · `--brand-*` absent from `:root` · **High**
 
-The 10-token `--ace-*` family is defined **only** inside `body.ace-hub-theme-active` (`index.css:98-107`) and its `[data-direction='B']` variant. `:root` (lines 7-51) has none of them.
+The 10-token `--brand-*` family is defined **only** inside `body.brand-hub-theme-active` (`index.css:98-107`) and its `[data-direction='B']` variant. `:root` (lines 7-51) has none of them.
 
 Activation is `App.js:57-59`:
 ```js
 document.documentElement.setAttribute('data-direction', direction);
-document.body.classList.add('ace-hub-theme-active');
+document.body.classList.add('brand-hub-theme-active');
 document.body.setAttribute('data-direction', direction);
 ```
 
-`--ace-line` is the app's default border and the **second-most-consumed token overall** (179 uses). Any surface rendering outside that body class — a portal to a detached root, a print stylesheet, an isolated test render, a Storybook-style harness — loses every border, panel fill, input background, and shadow simultaneously, with no error.
+`--brand-line` is the app's default border and the **second-most-consumed token overall** (179 uses). Any surface rendering outside that body class — a portal to a detached root, a print stylesheet, an isolated test render, a Storybook-style harness — loses every border, panel fill, input background, and shadow simultaneously, with no error.
 
-This is also why `gallery.html` in this folder must set `class="ace-hub-theme-active"` on `<body>`: without it, the specimens render borderless.
+This is also why `gallery.html` in this folder must set `class="brand-hub-theme-active"` on `<body>`: without it, the specimens render borderless.
 
-**Recommend:** duplicate the light `--ace-*` block into `:root` as a safe default. Purely additive, zero visual change in the app, removes a whole class of failure.
+**Recommend:** duplicate the light `--brand-*` block into `:root` as a safe default. Purely additive, zero visual change in the app, removes a whole class of failure.
 
 ---
 
@@ -192,7 +192,7 @@ The pattern is clear: `index.css` has grown in successive "waves" that override 
 |---|---|---|
 | `forecast-*` classNames | 1,846 | **0** |
 | Distinct `forecast-*` CSS selectors | 249 | — |
-| `ace-*` classNames | 24 | 16 |
+| `brand-*` classNames | 24 | 16 |
 | Inline `style={{}}` | 194 | 8 |
 | Approach | hand-written CSS classes | `ui/` primitives + Tailwind utilities |
 
@@ -200,24 +200,24 @@ Same visual ideas, invented twice, sharing nothing:
 
 | Idea | Forecast | RM Pro Forma |
 |---|---|---|
-| Card surface | `.forecast-panel` (radius 14, `--ace-panel-strong`, no shadow) | `.card-wrapper` (radius 18, `--ace-panel`, `--ace-shadow`) |
-| Mono eyebrow | `.forecast-section-code` | `.ace-rm-eyebrow` |
+| Card surface | `.forecast-panel` (radius 14, `--brand-panel-strong`, no shadow) | `.card-wrapper` (radius 18, `--brand-panel`, `--brand-shadow`) |
+| Mono eyebrow | `.forecast-section-code` | `.brand-rm-eyebrow` |
 | Tab selector | `.forecast-segmented` | Tailwind pill buttons (`RMProForma_Dashboard.js:905-926`) |
 | Accordion | `.forecast-accordion` (native `<details>`) | Radix `ui/accordion` |
-| Buttons | `.forecast-primary-button` | `ui/Button` → `.ace-button-primary` |
-| Input | `.forecast-table input` | `.ace-input` via `ui/Input` |
+| Buttons | `.forecast-primary-button` | `ui/Button` → `.brand-button-primary` |
+| Input | `.forecast-table input` | `.brand-input` via `ui/Input` |
 
-**The `ace-*` layer (29 selectors, all token-backed, both themes) is already the de-facto shared foundation** — it's what `card-wrapper`, `ace-scroll-shell`, `ace-floating-*`, `ace-tooltip`, and `ace-table-header` live in, and it's the only vocabulary both products touch.
+**The `brand-*` layer (29 selectors, all token-backed, both themes) is already the de-facto shared foundation** — it's what `card-wrapper`, `brand-scroll-shell`, `brand-floating-*`, `brand-tooltip`, and `brand-table-header` live in, and it's the only vocabulary both products touch.
 
-**Recommend:** don't merge the products. Do declare `ace-*` the shared layer explicitly, and when a `forecast-*` and an RMPF component are the same idea (the six rows above), converge them onto an `ace-*` primitive one pair at a time.
+**Recommend:** don't merge the products. Do declare `brand-*` the shared layer explicitly, and when a `forecast-*` and an RMPF component are the same idea (the six rows above), converge them onto an `brand-*` primitive one pair at a time.
 
 ---
 
 ## F-10 · Three incompatible table implementations · Medium
 
-1. **Forecast:** `.forecast-home-table` / `.forecast-table` — `border-collapse`, 12.5-13px body, JetBrains Mono 10px uppercase `th`, `--ace-line` borders. `index.css:2843-2874, 1929-1979`
+1. **Forecast:** `.forecast-home-table` / `.forecast-table` — `border-collapse`, 12.5-13px body, JetBrains Mono 10px uppercase `th`, `--brand-line` borders. `index.css:2843-2874, 1929-1979`
 2. **RMPF form grid:** `<table className="w-full">` with per-cell `px-2 py-1` — **no shared class at all.** `RMProForma_Dashboard.js:706-755`
-3. **RMPF statements:** `<table className="min-w-full">` in an `ace-scroll-shell`, header class on the `<tr>` (`ace-table-header`) not the `<thead>`, sized by a scoped `<style jsx>` block of `custom-text-size-*` rules. `MonthlyAnnualBalanceSheet.js:46, 149-162`; `MonthlyAnnualIncomeStatement.js:79, 217-230`
+3. **RMPF statements:** `<table className="min-w-full">` in an `brand-scroll-shell`, header class on the `<tr>` (`brand-table-header`) not the `<thead>`, sized by a scoped `<style jsx>` block of `custom-text-size-*` rules. `MonthlyAnnualBalanceSheet.js:46, 149-162`; `MonthlyAnnualIncomeStatement.js:79, 217-230`
 
 Three products' worth of table conventions in one app. (3) is the odd one — a `<style jsx>` block inside a component, unlike anything else in the codebase.
 
@@ -258,7 +258,7 @@ Absent: `ForecastExecView.js:880`, `ForecastReviewConsole.js:660`, `ForecastMacr
 
 ## F-15 · `card-wrapper` silently overrides `ui/Card` · Medium
 
-`ui/Card` (`index.js:40-45`) applies `rounded-xl border-border bg-card text-card-foreground`. RM Pro Forma passes `card-wrapper` alongside (`RMProForma_Dashboard.js:854`), and `.card-wrapper` (`index.css:382-393`) sets `border-radius:18px` + `background: var(--ace-panel)`.
+`ui/Card` (`index.js:40-45`) applies `rounded-xl border-border bg-card text-card-foreground`. RM Pro Forma passes `card-wrapper` alongside (`RMProForma_Dashboard.js:854`), and `.card-wrapper` (`index.css:382-393`) sets `border-radius:18px` + `background: var(--brand-panel)`.
 
 The stylesheet wins. The Tailwind classes on `ui/Card` are dead whenever `card-wrapper` is present — which is every usage. Anyone reading the JSX would conclude the card is `rounded-xl` on `bg-card`; it isn't.
 
@@ -266,9 +266,9 @@ The stylesheet wins. The Tailwind classes on `ui/Card` are dead whenever `card-w
 
 ## F-16 · `ui/Button` exposes one of three variants · Medium
 
-`index.js:81-89` hard-codes `ace-button-primary`. There is no `variant` prop. But `.ace-button-secondary` (`index.css:456`) and `.ace-button-danger` (`475`) both exist and are styled.
+`index.js:81-89` hard-codes `brand-button-primary`. There is no `variant` prop. But `.brand-button-secondary` (`index.css:456`) and `.brand-button-danger` (`475`) both exist and are styled.
 
-RM Pro Forma works around it by dropping to a raw element: `<button className="ace-button-secondary rounded-full">` (`RMProForma_Dashboard.js:934`).
+RM Pro Forma works around it by dropping to a raw element: `<button className="brand-button-secondary rounded-full">` (`RMProForma_Dashboard.js:934`).
 
 **Recommend:** add a `variant` prop. The CSS is already written.
 
@@ -360,18 +360,18 @@ The root-level doc is built on the 9-colour brand palette that no longer renders
 | Doc claim | Reality |
 |---|---|
 | Entire brand palette table | None of the 9 hexes renders anywhere |
-| "Main page titles `text-2xl font-bold text-brand-hobgoblin`" | `<h1 className="ace-rm-title">` (`:845`) — clamp 30-44px, weight 600 |
+| "Main page titles `text-2xl font-bold text-brand-hobgoblin`" | `<h1 className="brand-rm-title">` (`:845`) — clamp 30-44px, weight 600 |
 | "Accordion triggers Mulberry, chevron Nero, hover underline" | `accordion.js:23` — `text-foreground`, `hover:text-primary`, `font-semibold`; chevron `text-muted-foreground`. Hover is a colour change, not underline |
-| "Calculate button `bg-brand-mulberry hover:bg-brand-mulberry/90`" | `<Button className="mt-4">` (`:1303`) → `.ace-button-primary` (`index.css:437-454`): amber, `border-radius:999px` pill, hover `filter: brightness(0.96)` |
+| "Calculate button `bg-brand-mulberry hover:bg-brand-mulberry/90`" | `<Button className="mt-4">` (`:1303`) → `.brand-button-primary` (`index.css:437-454`): amber, `border-radius:999px` pill, hover `filter: brightness(0.96)` |
 | "Error messages `bg-red-100 border-red-400`" | Those classes appear nowhere. Actual: `border-destructive/45 bg-destructive/15 text-destructive` (`:1046`) |
 | "Input arrows: base Smokescreen, hover Hobgoblin/Lust, bg Pigeon" | `:228, :236` — base `text-muted-foreground`, hover `text-accent`/`text-destructive`, hover bg `bg-primary/15` |
 | "Dropdown hover: Caribbean Blue with white text" | `select.js:59` — `data-[highlighted]:bg-primary/20 data-[highlighted]:text-foreground` |
-| "Statement table headers: Smokescreen bg, white text" | `ace-table-header` (`index.css:489-493`) — light panel bg, dark `--foreground` text. **The inverse.** |
-| "Yearly input table cell backgrounds: Input Fill" | Cells unstyled (`:719`); the fill is on the nested `.ace-input` |
+| "Statement table headers: Smokescreen bg, white text" | `brand-table-header` (`index.css:489-493`) — light panel bg, dark `--foreground` text. **The inverse.** |
+| "Yearly input table cell backgrounds: Input Fill" | Cells unstyled (`:719`); the fill is on the nested `.brand-input` |
 | "Payback bars: Hobgoblin/Lust gradients" | `RMProForma_Payback.js:64-72` — magnitude-scaled **alpha on solid fills**, `hsl(var(--chart-up) / …)`. No `<linearGradient>` exists in the file |
 | All chart line-colour claims | Charts use `hsl(var(--chart-N))` exclusively |
-| "Info tooltips `bg-brand-smokescreen text-white`" | `.ace-tooltip` (`index.css:495-501`) — `--ace-panel-strong` bg, `--foreground` text |
-| "Navigation active: Mulberry background" | `.ace-nav-link` (`index.css:252+`); RMPF tabs use `bg-primary`/`bg-secondary` |
+| "Info tooltips `bg-brand-smokescreen text-white`" | `.brand-tooltip` (`index.css:495-501`) — `--brand-panel-strong` bg, `--foreground` text |
+| "Navigation active: Mulberry background" | `.brand-nav-link` (`index.css:252+`); RMPF tabs use `bg-primary`/`bg-secondary` |
 
 **Recommend:** replace the doc with a pointer to `design-system/tokens.json` + `CHARTS.md`. Its accurate content (flash timing, accordion structure, stroke widths) is already folded into this folder. Keeping a second colour doc guarantees a second drift.
 
@@ -441,5 +441,5 @@ Worth checking whether any of the 186 usages are currently mis-signalling status
 - **Chart tokens are correctly wired through Tailwind** (`tailwind.config.js:58-76`) — the config faithfully mirrors the CSS.
 - **`--chart-up`/`--chart-down`/`--destructive` value relationships hold in both themes** — the aliasing is deliberate, not accidental.
 - **No `!important` abuse** — across 5,581 lines of `index.css` the override waves are all managed by specificity and source order.
-- **Every specimen in `gallery.html` renders correctly against the real stylesheet in both themes**, with no console errors — the token layer and the `forecast-*`/`ace-*` component layers are internally sound. F-28 was surfaced by that render.
-- **The `ace-*` layer is uniformly token-backed** — all 29 selectors reference tokens; no hard-coded colour in that family.
+- **Every specimen in `gallery.html` renders correctly against the real stylesheet in both themes**, with no console errors — the token layer and the `forecast-*`/`brand-*` component layers are internally sound. F-28 was surfaced by that render.
+- **The `brand-*` layer is uniformly token-backed** — all 29 selectors reference tokens; no hard-coded colour in that family.

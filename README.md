@@ -1,4 +1,4 @@
-# ACE Analytics Design System
+# Brand Design System
 
 Tokens, components, patterns and charting conventions **extracted** from two production FP&A products: **Forecast** (82 files, ~22.7k lines) and **RM Pro Forma**.
 
@@ -23,9 +23,9 @@ That is the point of the repo. A design system that only describes the intended 
 
 ```
   TOKENS          49 custom properties                     FRAME.md
-    │             shadcn semantic (20) · chart (13) · ACE surface (10) · component-scoped (6)
+    │             shadcn semantic (20) · chart (13) · Brand surface (10) · component-scoped (6)
     ▼
-  PRIMITIVES      ace-*  (29 selectors)                    COMPONENTS.md §B
+  PRIMITIVES      brand-*  (29 selectors)                    COMPONENTS.md §B
     │             the de-facto SHARED layer — token-backed, used by both products
     │             components/ui/ (10 React exports, Radix + Tailwind)
     ▼
@@ -40,7 +40,7 @@ That is the point of the repo. A design system that only describes the intended 
 
 **FRAME is the primitive layer; DESIGN is the application layer.** FRAME says what exists and what it is called. DESIGN says what to do with it — how to compose, when to reach for a shared primitive versus invent a product class, and what not to do.
 
-**The load-bearing fact:** the two products barely share a vocabulary. Forecast uses 1,846 `forecast-*` classNames; RM Pro Forma uses **zero**. They meet only at the token layer and the `ace-*` primitives. That is not a bug to fix today, but it is the thing to know before touching either (`FINDINGS.md` F-09).
+**The load-bearing fact:** the two products barely share a vocabulary. Forecast uses 1,846 `forecast-*` classNames; RM Pro Forma uses **zero**. They meet only at the token layer and the `brand-*` primitives. That is not a bug to fix today, but it is the thing to know before touching either (`FINDINGS.md` F-09).
 
 ---
 
@@ -50,14 +50,14 @@ That is the point of the repo. A design system that only describes the intended 
 
 | Selector | Role | Tokens |
 |---|---|---|
-| `:root` | Base scaffolding, light values. **No `--ace-*` family** | 33 |
-| `body.ace-hub-theme-active` | Theme A / light | 43 |
-| `body.ace-hub-theme-active[data-direction='B']` | Theme B / dark | 43 |
+| `:root` | Base scaffolding, light values. **No `--brand-*` family** | 33 |
+| `body.brand-hub-theme-active` | Theme A / light | 43 |
+| `body.brand-hub-theme-active[data-direction='B']` | Theme B / dark | 43 |
 
 Two consequences that bite, both covered in detail in `FRAME.md`:
 
-1. **Anything rendering outside `body.ace-hub-theme-active` loses every `--ace-*` token** — including `--ace-line`, the app's default border and second-most-used token overall (179 uses). Borders, panel fills, input backgrounds and shadows vanish simultaneously and silently.
-2. **Colour tokens are bare HSL channels, not colours.** `hsl(var(--primary))` is correct; `var(--primary)` renders nothing. The `--ace-*` family is the exception — those are complete values, consumed bare.
+1. **Anything rendering outside `body.brand-hub-theme-active` loses every `--brand-*` token** — including `--brand-line`, the app's default border and second-most-used token overall (179 uses). Borders, panel fills, input backgrounds and shadows vanish simultaneously and silently.
+2. **Colour tokens are bare HSL channels, not colours.** `hsl(var(--primary))` is correct; `var(--primary)` renders nothing. The `--brand-*` family is the exception — those are complete values, consumed bare.
 
 ---
 
@@ -67,7 +67,7 @@ Two consequences that bite, both covered in detail in `FRAME.md`:
 |---|---|
 | `FRAME.md` | **The token layer.** 49 properties across four families, the three-block theme architecture, both consumption conventions, and the 11 phantom tokens marked do-not-use |
 | `DESIGN.md` | **The application rules.** How to compose token → primitive → component → pattern; when to reuse vs invent; the 10 patterns; chart rules; a cited Do/Don't list |
-| `COMPONENTS.md` | The catalog — 15 Forecast components, 7 shared `ace-*` primitives, the `ui/` layer, 5 RM Pro Forma components |
+| `COMPONENTS.md` | The catalog — 15 Forecast components, 7 shared `brand-*` primitives, the `ui/` layer, 5 RM Pro Forma components |
 | `PATTERNS.md` | 10 composite patterns — how the components compose into screens |
 | `CHARTS.md` | Recharts conventions, the `--chart-*` palette, the 8 chart components, a checklist for new charts |
 | `FINDINGS.md` | 28 drift findings with severity and `file:line` evidence. **Read before changing anything** |
@@ -91,7 +91,7 @@ Toggle **A · Light** / **B · Dark** in the header to switch themes. Token swat
 
 Two things the page honestly cannot show, both flagged on it:
 
-1. **Tailwind utilities do not resolve.** `index.css` contains `@tailwind` directives that only expand through the PostCSS build. Loaded raw, no utility class works — so **RM Pro Forma specimens render structurally but unstyled**. The Forecast and `ace-*` specimens are hand-written CSS and render exactly as in the app.
+1. **Tailwind utilities do not resolve.** `index.css` contains `@tailwind` directives that only expand through the PostCSS build. Loaded raw, no utility class works — so **RM Pro Forma specimens render structurally but unstyled**. The Forecast and `brand-*` specimens are hand-written CSS and render exactly as in the app.
 2. **Webfonts need network.** Fonts load from Google Fonts via `@import`; offline, everything falls back to system stacks.
 
 ---
@@ -104,15 +104,68 @@ The source application is a private repo and is not vendored here. So:
 
 > **This snapshot can drift from the running app, and nothing in this repo will warn you when it does.** Treat a gallery specimen as evidence about the snapshot, not a guarantee about production.
 
-Refresh it in one line, from the repo root:
+Refreshing is a copy **plus a rename pass.** This repo normalises the source app's `ace-`/`aa-` prefixes to
+`brand-` (see [Naming provenance](#naming-provenance)), and `gallery.html` references the *renamed* identifiers.
+A bare `cp` silently reverts the stylesheet to `ace-*` — the gallery still loads, but every specimen loses its
+borders, panel fills, inputs and shadows at once, and nothing errors. Copy **and** rewrite, from the repo root:
 
 ```bash
-cp /path/to/BankAnalysis/frontend/src/index.css styles/index.snapshot.css
+cp /path/to/BankAnalysis/frontend/src/index.css styles/index.snapshot.css && \
+perl -pi -e '
+  s/(?<![\w-])ace-brand(?![\w])/brand/g;
+  s/--aa-ink(?![\w-])/--brand-ink/g;
+  s/--aa-accent(?![\w-])/--brand-accent/g;
+  s/--ace-/--brand-/g;
+  s/(?<![\w-])ace-/brand-/g;
+' styles/index.snapshot.css
+```
+
+**The `(?<![\w-])` lookbehind is load-bearing.** A naive `sed 's/ace/brand/g'` corrupts every English word that
+contains "ace" — `space`, `spacing`, `replace`, `interface`, `workspace`, `surface`, `placement`, `namespace` —
+and the snapshot alone contains 286 of them. Rule order matters too: `--ace-` is rewritten before the general
+prefix rule, and `ace-brand` before both, so `.ace-brand-mark` becomes `.brand-mark` rather than
+`.brand-brand-mark`.
+
+Verify any refresh with these two greps:
+
+```bash
+# 1. corruption check — must print nothing
+grep -nE 'spbrand|spbranding|surfbrand|replbrand|interfbrand|workspbrand|plbrandment' styles/index.snapshot.css
+# 2. leftover check — must print 0
+grep -cE -- '--ace-|\.ace-|(^|[^A-Za-z])ace-' styles/index.snapshot.css
 ```
 
 Same applies to `tokens.css` and `tokens.json` — they are mirrors. The app's `index.css` is canonical; editing anything here changes nothing in the app.
 
 **After refreshing the snapshot,** re-run the checks in `FRAME.md` §12: re-extract token definitions, re-check that every `var(--x)` has a matching `--x:`, and open the gallery in both themes to confirm every specimen still renders.
+
+---
+
+## Naming provenance
+
+**This repo renames the source application's brand prefixes; the source application does not.**
+
+| Source app (`index.css`) | This repo |
+|---|---|
+| `--ace-*` | `--brand-*` |
+| `.ace-*` (`ace-input`, `ace-tooltip`, `ace-scroll-shell`, …) | `.brand-*` |
+| `body.ace-hub-theme-active` / `ace-hub-theme` | `body.brand-hub-theme-active` / `brand-hub-theme` |
+| `.ace-brand`, `.ace-brand-mark`, `.ace-brand-title`, … | `.brand`, `.brand-mark`, `.brand-title`, … |
+| `--aa-ink`, `--aa-accent` | `--brand-ink`, `--brand-accent` |
+
+Nothing else was renamed: `forecast-*`, `--chart-*`, `--radius`, the shadcn semantic tokens and the product names
+(BankAnalysis, Forecast, RM Pro Forma) are untouched.
+
+**What this means for the citations.** Every `file:line` reference in `COMPONENTS.md`, `PATTERNS.md`, `CHARTS.md`
+and `FINDINGS.md` points into the source application, where the identifier at that line still carries its original
+`ace-`/`aa-` prefix. The line numbers are accurate; only the prefix differs. The citations have deliberately **not**
+been rewritten — stating the mapping once here keeps them honest without pretending the source app uses `brand-`.
+
+**One merge worth knowing about.** The source has two distinct names that both normalise to `--brand-ink`: the
+phantom `--ace-ink` (referenced, never defined, always falls back to its inline hex) and the scoped alias `--aa-ink`
+(defined on the brand mark). They do not collide in practice — `--brand-ink` is only *defined* inside `.brand-mark`,
+the 22×33px logo, and its only consumer, `.forecast-notif-badge`, never renders inside it. That consumer still falls
+back to `#14261c` exactly as it did before the rename.
 
 ---
 
